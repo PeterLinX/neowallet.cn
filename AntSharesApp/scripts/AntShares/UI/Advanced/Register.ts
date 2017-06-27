@@ -1,0 +1,122 @@
+﻿namespace AntShares.UI.Advanced {
+    export class Register extends TabBase {
+
+        protected oncreate(): void {
+            $(this.target).find("#register").click(this.OnRegisterButtonClick);
+            $("#select_register_asset").append("<option value=0>" + Resources.global.pleaseChoose + "</option>");
+            $("#select_register_asset").append("<option value=1>" + Core.AssetType[Core.AssetType.Share] + "</option>");
+            $("#select_register_asset").append("<option value=2>" + Core.AssetType[Core.AssetType.Token] + "</option>");
+            $("#select_register_asset").change(this.OnRegisterAssetChanged);
+            $("#check_limit").change(this.OnCheckLimitChanged);
+        }
+
+        protected onload(args: any[]): void {
+            if (Global.Wallet == null) {
+                TabBase.showTab("#Tab_Wallet_Open");
+                return;
+            }
+            formReset("form_register_asset");
+            let issuerArray = linq(Global.Wallet.getAccounts()).select(p => p.publicKey).toArray();
+            Promise.all(linq(Global.Wallet.getContracts()).select(p => p.getAddress()).toArray()).then(adminArray => {
+                for (let i = 0; i < issuerArray.length; i++) {
+                    $("#Tab_Advanced_Register #select_issuer").append("<option value=" + i + ">" + issuerArray[i] + "</option>");
+                }
+                for (let i = 0; i < adminArray.length; i++) {
+                    $("#Tab_Advanced_Register #select_admin").append("<option value=" + i + ">" + adminArray[i] + "</option>");
+                }
+            });
+        }
+
+        private inputAmountTemp;
+        private OnCheckLimitChanged = () => {
+            if ($("#check_limit").prop('checked') == true)
+            {
+                $("#input_amount").val(this.inputAmountTemp);
+                $("#input_amount").prop('disabled', false);
+            } else
+            {
+                this.inputAmountTemp = $("#input_amount").val();
+                $("#input_amount").val("∞");
+                $("#input_amount").prop('disabled', true);
+            }
+        }
+
+        private OnRegisterAssetChanged = () => {
+            let assetType = $("#Tab_Advanced_Register #select_register_asset").val();
+            $("#Tab_Advanced_Register #check_limit").prop('checked', true);
+            $("#Tab_Advanced_Register #check_limit").prop('disabled', false);
+            $("#Tab_Advanced_Register #input_amount").val("");
+            $("#Tab_Advanced_Register #input_amount").prop('disabled', false);
+        }
+
+        private OnRegisterButtonClick = () =>
+        {
+            if (formIsValid("form_register_asset"))
+            {
+                let _assetTotalAmount = $("#Tab_Advanced_Register #input_amount").val();
+                let assetTotalAmount: number = Number(_assetTotalAmount.split(",").join(""));
+                let _assetName = $("#Tab_Advanced_Register #input_asset_name").val();
+                let assetName = '[{ "lang": "zh-CN", "name": " ' + _assetName + ' "}]';
+                let assetType = $("#Tab_Advanced_Register #select_register_asset").find("option:selected").text();
+                let issuer = $("#Tab_Advanced_Register #select_issuer").find("option:selected").text();
+                let admin = $("#Tab_Advanced_Register #select_admin").find("option:selected").text();
+
+                try
+                {
+                    let tx: Core.RegisterTransaction = new Core.RegisterTransaction();
+
+                    tx.assetType = Core.AssetType[assetType];
+                    if (tx.assetType == null)
+                    {
+                        throw Error(Resources.global.selectAssetType);
+                    }
+                    //if (Core.AssetType[assetType] == Core.AssetType.Share) assetName = "";
+                    tx.name = assetName;
+                    tx.amount = $("#Tab_Advanced_Register #check_limit").prop('checked') == true ? Fixed8.fromNumber(assetTotalAmount) : Fixed8.MaxValue;
+                    tx.outputs = new Array<Core.TransactionOutput>(0);
+                    tx.precision = 0;
+                    Wallets.Wallet.toScriptHash(admin).then(result =>
+                    {
+                        tx.issuer = Cryptography.ECPoint.decodePoint(issuer.hexToBytes(), Cryptography.ECCurve.secp256r1);
+                        tx.admin = result;
+                        let _tx = Global.Wallet.makeTransaction(tx, Fixed8.Zero);
+                        return this.SignAndShowInformation(_tx);
+                    }).catch(reason =>
+                    {
+                        alert(reason);
+                    });
+                } catch (e)
+                {
+                    alert(e);
+                }
+            }
+        }
+
+        private SignAndShowInformation = (tx: Core.Transaction) => {
+            let context: Core.SignatureContext;
+            if (tx == null) {
+                throw new Error(Resources.global.insufficientFunds);
+            }
+            return Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]).then(ct => {
+                context = ct;
+                return Global.Wallet.sign(ct);
+            }).then(result => {
+                if (!result) throw new Error(Resources.global.canNotSign);
+                if (!context.isCompleted())
+                    throw new Error(Resources.global.thisVersion1);
+                tx.scripts = context.getScripts();
+                return Global.Wallet.saveTransaction(tx);
+            }).then(result => {
+                if (!result) throw new Error(Resources.global.txError1);
+                return Global.Node.relay(tx);
+            }).then(result => {
+                //TabBase.showTab("#Tab_Advanced_RegisterAssetList");
+                TabBase.showTab("#Tab_Asset_Index");
+                alert(Resources.global.registInfo + tx.hash.toString());
+            }).catch(reason => {
+                alert(reason);
+            });
+        }
+
+    }
+}

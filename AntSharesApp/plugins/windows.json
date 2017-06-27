@@ -1,0 +1,43 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-background-mode": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-badge": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-itunesfilesharing": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "AntShares"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-app-event": {
+            "PACKAGE_NAME": "AntShares"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "AntShares"
+        }
+    }
+}

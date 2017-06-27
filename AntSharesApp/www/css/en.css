@@ -1,0 +1,168 @@
+﻿title::before { content:'Neo App' }
+.lang-title::before { content:'Neo App' }
+.lang-create-wallet::before { content:'Create wallet' }
+.lang-open-wallet::after { content:'Open wallet' }
+.lang-input-wallet-name::before { content:'input wallet name' }
+.lang-import-password::before { content:'Set password for new wallet' }
+.lang-return-start::before { content:'Return to start' }
+.lang-start::after { content:'Start' }
+.lang-input-wallet-password::before { content:'input wallet password' }
+.lang-input-wallet-confirm-password::before { content:'input confirm password' }
+.lang-select-wallet-file::before { content:'select wallet file' }
+.lang-wallet-password-error::before { content:'Wallet password error' }
+.lang-change-wallet-password::before { content:'Change wallet password' }
+.lang-wallet-name::before { content:'wallet name' }
+.lang-validate-old-password::before { content:'validate old password' }
+.lang-input-new-password::before { content:'input new password' }
+.lang-confirm-new-password::before { content:'confirm new password' }
+.lang-account-list::before { content:'Account list' }
+.lang-create-account::before { content:'create account' }
+.lang-import-private-key::before { content:'import private key' }
+.lang-details::before { content:'details' }
+.lang-export::before { content:'export' }
+.lang-certification::before { content:'certification' }
+.lang-account-details::before { content:'account details' }
+.lang-public-key::before { content:'public key' }
+.lang-show-hide-private-key::before { content:'show/hide private key' }
+.lang-back-to-account-list::before { content:'back to account list' }
+.lang-import-private-key::before { content:'import private key' }
+.lang-input-private-key::before { content:'input private key' }
+.lang-contract-list::before { content:'Contract list' }
+.lang-create-muntisig::before { content:'create multiple signature account' }
+.lang-contract-details::before { content:'contract details' }
+.lang-contract-type::before { content:'contract type' }
+.lang-contract-content::before { content:'contract content' }
+.lang-contract-hash::before { content:'contract hash' }
+.lang-contract-address::before { content:'contract address' }
+.lang-min-sign-count::before { content:'minimum number of signatures' }
+.lang-add-public-key::before { content:'add public key' }
+.lang-create::before { content:'create' }
+.lang-back-to-contract-list::before { content:'back to contract-list' }
+.lang-back-to-list::before { content:'back to list' }
+.lang-my-asset::before { content:'My asset' }
+.lang-no-asset::before { content:'You currently have no assets' }
+.lang-issuer::before { content:'issuer' }
+.lang-asset-transfer::after { content:'Transfer' }
+.lang-select-asset::before { content:'select asset' }
+.lang-max-to-transfer::before { content:'the maximum transfer' }
+.lang-receiver::before { content:'receiver' }
+.lang-confirm-transfer::before { content:'confirm transfer' }
+.lang-my-tx-list::before { content:'Recently Transaction' }
+.lang-no-tx::before { content:"No transactions yet" }
+.lang-collapse-all::before { content:'collapse all' }
+.lang-tx::before { content:'transaction: ' }
+.lang-tx-input::before { content:'transaction input' }
+.lang-tx-output::before { content:'Transaction output' }
+.lang-tx-value::before { content:'value' }
+.lang-tx-asset::before { content:'asset' }
+.lang-tx-sign::before { content:'Transaction signature' }
+.lang-input::before { content:'input' }
+.lang-output::before { content:'output' }
+.lang-sign::before { content:'Signature' }
+.lang-sian-and-relay::before { content:'signature and broadcast' }
+.lang-regist-tx::before { content:'Register asset' }
+.lang-select-asset-type::before { content:'select asset type' }
+.lang-asset-name::before { content:'asset name' }
+.lang-amount-limited::before { content:'limited amount' }
+.lang-amount-limited2::after { content:'limited amount ' }
+.lang-select-issuer::before { content:'select issuer' }
+.lang-select-admin::before { content:'select admin' }
+.long-need-10000anc::before { content:'Registered assets will consume your 10000 ANC' }
+.lang-confirm-regist::before { content:'confirm regist' }
+.lang-my-register::before { content:'I registered assets' }
+.lang-amount::before { content:'amount' }
+.lang-no-regist::before { content:"You haven't registered assets" }
+.lang-issue-asset::before { content:'Issue asset' }
+.lang-select-asset::before { content:'select asset' }
+.lang-asset-type::before { content:'asset type' }
+.lang-add-reveiver::before { content:'add reveiver' }
+.lang-confirm-issue::before { content:'confirm issuance' }
+.lang-elect::before { content:'Election' }
+.lang-miner::before { content:'miner' }
+.lang-pawn-anc::before { content:'place ANC guarantee' }
+.lang-ok::before { content:'OK' }
+.lang-vote::before { content:'Vote' }
+.lang-candidate::before { content:'candidate' }
+.lang-relay::before { content:'Broadcast' }
+.lang-convert::before { content:'Convert' }
+.lang-backup::before { content:'Backup' }
+.lang-backup-note::before { content:'Backup function is currently only available for Android and Chrome' }
+.lang-backup-current-wallet::before { content:'Backup your current wallet' }
+.lang-import-wallet-file::before { content:'Import wallet file' }
+
+.lang-height::before { content:'sync progress: ' }
+.lang-height2::before { content:'height: ' }
+.lang-wallet::after { content:'Wallet' }
+.lang-change-password::after { content:'Change password' }
+.lang-user-center::after { content:'User center' }
+.lang-asset::after { content:'Asset' }
+.lang-adv-function::after { content:'Advanced' }
+.lang-regist-asset::after { content:'Register asset' }
+.lang-developer-tool::after { content:'Developer tool' }
+.lang-antshares-blockchain::after { content:'Antshares blockchain' }
+.lang-system-setup::after { content:'System setup' }
+.lang-normal-setup::after { content:'Normal setup' }
+.lang-help::after { content:'Help' }
+.lang-about::after { content:'About' }
+.lang-website::after { content:'Official website' }
+.lang-backup-restore::after { content:'Backup / Restore' }
+.lang-please-choose::after { content:'please choose' }
+.lang-transaction-list::after { content:'Transaction list' }
+.lang-transaction::after { content:'Transaction' }
+.lang-backup-danger::after { content:'To ensure the safety of your funds, please back up the wallet and keep it safe.' }
+.lang-account-list-info::after { content:'To ensure the safety of your funds, please export each account and keep it safe.' }
+.lang-tx-time::after { content:'Time' }
+.lang-tx-id::after { content:'Id' }
+.lang-tx-confirms::after { content:'Confirmations' }
+.lang-tx-type::after { content:'Type' }
+.lang-privacy::after { content:'Privacy policy' }
+.lang-receiver-address::after { content:'Receiver address' }
+.lang-backup-wallet::after { content:'Backup wallet' }
+.lang-contacts::after { content:'Contacts' }
+.lang-contact-btn::before { content:'Contacts' }
+.lang-welcome::after { content:'Welcome' }
+.lang-home::after { content:'Home' }
+.lang-receive::after { content:'Receive' }
+.lang-send::after { content:'Send' }
+.lang-create-contact::after { content:'Create contact' }
+.lang-name::after { content:'Name' }
+.lang-address::after { content:'Address' }
+.lang-my-contacts::after { content:'My Contacts' }
+.lang-no-contact::after { content:'You have no contacts' }
+.lang-asset-balance::after { content:'balance' }
+.lang-ans::after { content:'Neo' }
+.lang-anc::after { content:'Gas' }
+.lang-start-create::after { content:'Create new wallet' }
+.lang-start-restore::after { content:'Restore from backup file' }
+.lang-start-import::after { content:'From private key to create wallets' }
+.lang-start-create2::after { content:'If this is your first time using it, please do this, after creating a wallet purse please backup wallet files' }
+.lang-start-restore2::after { content:'The wallet if you want to restore the backup files, perform this operation' }
+.lang-start-import2::after { content:'If you have a antshares private key, and want to import into your wallet, please do this, need to wait after importing purse synchronization is complete before we can see the asset' }
+.lang-my-wallet::after { content:'MY WALLET' }
+.lang-start-create3::after { content:'Create wallet' }
+.lang-start-restore3::after { content:'Restore wallet' }
+.lang-start-import3::after { content:'Import pri-key' }
+.lang-restore1::after { content:'restore' }
+.lang-restore2::after { content:'Restore' }
+.lang-no-wallet::after { content:'No Wallet File' }
+.lang-delete::after { content:'delete' }
+.lang-restore-info::after { content:'Warning: wallet file cannot be downloaded or restored in this browser, for your asset safety, please download Neo App in Appstore.' }
+.lang-backup-info::after {
+    content: 'Warning: wallet file cannot be downloaded or restored in this browser, for your asset safety, please download Neo App in Appstore.'
+}
+.lang-cancel::after { content:'cancel' }
+.lang-confirm-delete::after { content:'Are you sure you want to delete this contact?' }
+.lang-callout-web::after { content:'The browser will generate a wallet backup file after you click [backup your current wallet]. When you empty the browser database or you changed the browser or rebuilt the OS, you can use this very backup file to recover your current wallet. So please store this file safe and remember the password to it. Loss of wallet file or forgetting the wallet password may cause the loss of assets.' }
+.lang-callout-app::after { content:'After clicking [backup your current wallet file], a systemic share menu will show up, you can share the wallet file to yourself via email, qq or Internet drives. When you reinstall the Antshares Wallet App or you changed your device, you can use the backup file to recover the current wallet. We strongly recommend you safely store the shared wallet file in case of deleted emails or expired Internet drive.' }
+.lang-already-backup::after { content:'I have backed up wallet' }
+.lang-no-backup::after { content:'Not yet' }
+.lang-receive-backup::after { content:'To protect your assets, recipient address will show up only after you backed up the wallet file. Click the [Forward to Backup] below to the backup page. After backup, store the wallet file appropriately.' }
+.lang-receive-gotobackup::after { content:'Forward to Backup' }
+.lang-tips::after { content:'Tips' }
+.lang-haveyoubackup::after { content:'Have you backed up?' }
+.lang-hasbackup-p::after { content:'After backing up wallet, please click the button below, you can see receive address.' }
+.lang-draw-unlock-pattern::after { content:'Please draw the unlock pattern' }
+.lang-unlock-pattern::after { content:'Unlock pattern' }
+.lang-setup-gesture::after { content: 'Setup gesture password' }
+.lang-system-setup::after { content: 'System setup' }
+.lang-check-privatekey::after { content: 'Check your private key'}

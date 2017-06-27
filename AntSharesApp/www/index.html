@@ -1,0 +1,832 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="description" content="Neo是基于区块链技术，将实体世界的资产和权益进行数字化，通过点对点网络进行登记发行、转让交易、清算交割等金融业务的去中心化网络协议。" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-eval' data: gap: blob:; connect-src *; media-src *; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+    <title>Neo App</title>
+    <!-- NeoApp 引用 -->
+    <link id="lang" href="" rel="stylesheet" />
+    <link href="lib/jQuery.mmenu/dist/core/css/jquery.mmenu.all.css" rel="stylesheet" />
+    <link href="lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="lib/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet" />
+    <link href="lib/bootstrap-material-design/css/ripples.css" rel="stylesheet">
+    <link href="lib/docs/docs.css" rel="stylesheet" />
+    <link href="css/site.css" rel="stylesheet" />
+    <script src="lib/jquery/dist/jquery.min.js"></script>
+    <script src="lib/jquery-collapse/jquery.collapse.js"></script>
+    <script src="lib/jQuery.mmenu/dist/core/js/jquery.mmenu.min.all.js"></script>
+
+</head>
+<body>
+    <div id="page">
+        <div class="content">
+            <div class="hello">
+                <div class="loading">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <div style="margin-top:50px">正在恢复……</div>
+                </div>
+            </div>
+            <header>
+                <a id="icon_menu" href="#menu" class="iconfont">&#xe60c;</a>
+                <span class="header-title">
+                    <!--<img src="img/logo-line.png" /><span class="header-antsharesapp lang-title"></span>-->
+                    <i class="camera iconfont" onclick="scan()">&#xe621;</i>
+                </span>
+                <span class="header-title">
+                    <span class="lang-my-wallet"></span>
+                    <i class="camera iconfont" onclick="scan()">&#xe621;</i>
+                </span>
+                <span class="header-title">
+                    <span class="lang-setup-gesture"></span>
+                </span>
+                <span class="header-title">
+                    <span class="lang-unlock-pattern"></span>
+                </span>
+            </header>
+            <div class="tab-content">
+                <div style="position:absolute; left:0; bottom:50px; height:50px; width:50px" onclick="showDevTools()"></div>
+                <div id="Tab_Wallet_Start" class="form-horizontal tab-pane">
+                    <h3 class="page-header lang-welcome"></h3>
+                    <div class="panel panel-success">
+                        <div class="panel-heading lang-start-create"></div>
+                        <div class="panel-body row">
+                            <div class="col-md-3 col-sm-4">
+                                <a class="btn btn-success tab-trigger lang-start-create3" href="#Tab_Wallet_Create"></a>
+                            </div>
+                            <div class="col-md-9 col-sm-8 text-success lang-start-create2"></div>
+                        </div>
+                    </div>
+                    <div class="panel panel-info">
+                        <div class="panel-heading lang-start-restore"></div>
+                        <div class="panel-body row">
+                            <div class="col-md-3 col-sm-4">
+                                <a class="btn btn-info tab-trigger lang-start-restore3" href="#Tab_Wallet_Restore"></a>
+                            </div>
+                            <div class="col-md-9 col-sm-8">
+                                <div class="text-info lang-start-restore2"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-warning">
+                        <div class="panel-heading lang-start-import"></div>
+                        <div class="panel-body row">
+                            <div class="col-md-3 col-sm-4">
+                                <a class="btn btn-warning tab-trigger lang-start-import3" href="#Tab_Wallet_Import"></a>
+                            </div>
+                            <div class="col-md-9 col-sm-8">
+                                <div class="text-warning lang-start-import2"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="Tab_Wallet_Create" class="form-horizontal tab-pane">
+                    <form id="form_create_wallet" autocomplete="off">
+                        <h3 class="page-header lang-create-wallet"></h3>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label  lang-input-wallet-password"></label>
+                            <div class="col-sm-6">
+                                <input id="create_password" name="create_password" type="password" data-val="true" data-val-length-min="8" />
+                                <span class="text-danger" data-valmsg-for="create_password" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-input-wallet-confirm-password"></label>
+                            <div class="col-sm-6">
+                                <input id="create_password_confirm" name="create_password_confirm" data-val-equalto-other="create_password" type="password" data-val="true" />
+                                <span class="text-danger" data-valmsg-for="create_password_confirm" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-push-4 col-sm-push-4">
+                                <button id="create_wallet" type="submit" onclick="event.preventDefault()" class="btn btn-success"></button> <!--如果不加preventDefault会跳转空白页面-->
+                            </div>
+                        </div>
+                    </form>
+                    <a class="tab-trigger return-start lang-return-start" href="#Tab_Wallet_Start"></a>
+                </div>
+                <div id="Tab_Wallet_Restore" class="form-horizontal tab-pane">
+                    <div id="div_restore_info" style="display:none">
+                        <p class="lang-restore-info">
+                        </p>
+                    </div>
+                    <form id="form_restore">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8">
+                                <h3 class="page-header lang-import-wallet-file"></h3>
+                                <div>
+                                    <input type="file" id="files" class="file" data-show-upload="false" data-show-preview="false" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="form_ios_restore" style="display:none">
+                        <h3 class="page-header lang-restore2"></h3>
+                        <div class="form-group">
+                            <input type="hidden" id="restore_name_selected" />
+                        </div>
+                        <div class="my-table">
+                            <div>
+                                <h5 id="restore_info" style="display:none; padding-top:50px; text-align:center" class="lang-no-wallet"></h5>
+                            </div>
+                            <ul>
+                                <li class="row" style="display:none">
+                                    <div class="col-sm-9 col-xs-8 restore-name select">Peter Lin</div>
+                                    <div class="col-sm-3 col-xs-4 restore-action" style="display:none">
+                                        <button class="btn btn-sm btn-danger btn-restore lang-restore2" type="button"></button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a class="tab-trigger return-start lang-return-start" href="#Tab_Wallet_Start"></a>
+                </div>
+                <div id="Tab_Wallet_Import" class="form-horizontal tab-pane">
+                    <form id="form_account_import" autocomplete="off">
+                        <h3 class="page-header lang-import-private-key"></h3>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-input-private-key"></label>
+                            <div class="col-sm-6">
+                                <input id="import_prikey_input" name="import_prikey_input" type="text" data-val="true" data-val-length-max="52" data-val-length-min="52" />
+                                <span class="text-danger" data-valmsg-for="import_prikey_input" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label  lang-import-password"></label>
+                            <div class="col-sm-6">
+                                <input id="import_password" name="import_password" type="password" data-val="true" data-val-length-min="8" />
+                                <span class="text-danger" data-valmsg-for="import_password" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-input-wallet-confirm-password"></label>
+                            <div class="col-sm-6">
+                                <input id="import_password_confirm" name="import_password_confirm" type="password" data-val-equalto-other="import_password" data-val="true" />
+                                <span class="text-danger" data-valmsg-for="import_password_confirm" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-push-4 col-sm-push-4">
+                                <button id="import_prikey" type="submit" onclick="event.preventDefault()" class="btn btn-success"></button>
+                            </div>
+                        </div>
+                    </form>
+                    <a class="tab-trigger return-start lang-return-start" href="#Tab_Wallet_Start"></a>
+                </div>
+
+                <div id="Tab_Wallet_Open" class="form-horizontal tab-pane active">
+                    <form id="form_open_wallet" autocomplete="off">
+                        <h3 class="page-header lang-open-wallet"></h3>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-select-wallet-file"></label>
+                            <div class="col-sm-6">
+                                <span class="text-danger"></span>
+                                <select class="list_wallet_ul form-control" id="list_wallet_name"></select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-input-wallet-password"></label>
+                            <div class="col-sm-6">
+                                <input id="open_password" name="open_password" data-val="true" type="password" />
+                                <span class="text-danger" data-valmsg-for="open_password" data-valmsg-replace="true"></span>
+                                <span id="open_error" class="text-danger lang-wallet-password-error" style="display:none"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-push-4 col-sm-push-4">
+                                <button type="submit" onclick="event.preventDefault()" class="btn btn-success lang-open-wallet"></button>
+                            </div>
+                        </div>
+                        <!--<div id="gesture_pwd_tips" class="bs-callout bs-callout-danger">
+                            <h4 class="lang-tips"></h4>
+                            <p>您可以在设置中设置手势密码进行登录</p>
+                        </div>-->
+                    </form>
+                </div>
+                <div id="Tab_Wallet_ChangePassword" class="form-horizontal tab-pane">
+                    <form id="form_change_password" autocomplete="off">
+                        <h3 class="page-header lang-change-wallet-password"></h3>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-wallet-name"></label>:
+                            <div class="col-sm-6">
+                                <label class="change-wallet-name" id="change_wallet_name">占位符：钱包名称</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-validate-old-password"></label>
+                            <div class="col-sm-6">
+                                <input id="old_password" name="old_password" type="password" data-val="true" />
+                                <span class="text-danger" data-valmsg-for="old_password" data-valmsg-replace="true"></span>
+                                <span id="change_error" class="text-danger lang-wallet-password-error" style="display:none"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-input-new-password"></label>
+                            <div class="col-sm-6">
+                                <input id="new_password" name="new_password" type="password" data-val="true" data-val-length-min="8" />
+                                <span class="text-danger" data-valmsg-for="new_password" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-confirm-new-password"></label>
+                            <div class="col-sm-6">
+                                <input id="new_password_confirm" name="new_password_confirm" class="form-control" type="password" data-val="true" data-val-equalto-other="new_password" />
+                                <span class="text-danger" data-valmsg-for="new_password_confirm" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-push-4 col-sm-push-4">
+                                <button type="submit" onclick="event.preventDefault()" class="btn btn-success lang-change-wallet-password"></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div id="Tab_Wallet_Backup" class="form-horizontal tab-pane">
+                    <h3 class="page-header lang-backup"></h3>
+                    <div id="div_web">
+                        <button id="backup_web" class="btn btn-success withripple lang-backup-current-wallet"></button>
+                        <a id="blob" href="" style="display:none">blob</a>
+                    </div>
+                    <div id="div_app">
+                        <button type="button" id="backup_app" class="btn btn-info withripple lang-backup-current-wallet"></button>
+                    </div>
+                    <div id="div_backup_info" style="display:none">
+                        <p class="lang-backup-info"></p>
+                    </div>
+                    <div class="bs-callout bs-callout-danger">
+                        <h4 class="lang-tips"></h4>
+                        <p id="callout_web" class="lang-callout-web"></p>
+                        <p id="callout_app" class="lang-callout-app"></p>
+                    </div>
+                    <div id="hasbackup_div" style="display:none" class="bs-callout bs-callout-info">
+                        <h4 class="lang-haveyoubackup"></h4>
+                        <p class="lang-hasbackup-p"></p>
+                        <button id="hasBackup" class="btn btn-info withripple lang-already-backup"></button>
+                        <button onclick="$('#hasbackup_div').hide('fast')" class="btn btn-default withripple lang-no-backup"></button>
+                    </div>
+                </div>
+                <div id="Tab_Account_Index" class="tab-pane">
+                    <div class="blue-panel">
+                        <div class="ans-div"><span class="lang-ans"></span> <span id="my_ans">0</span></div>
+                        <div class="anc-div"><span class="lang-anc"></span> <span id="my_anc">0</span></div>
+                        <div class="all-asset-btn withripple">
+                            <a id="asset_show_more" href="javascript:" class="iconfont">&#xe73d;</a>
+                        </div>
+                        <div class="other-assets my-table">
+                            <div class="row title">
+                                <div class="col-xs-4 lang-asset-name">
+                                </div>
+                                <div class="col-xs-3 lang-asset-balance">
+                                </div>
+                                <div class="col-xs-5 lang-issuer">
+                                </div>
+                            </div>
+                            <ul>
+                                <li class="row" style="display:none">
+                                    <div class="col-xs-4 ellipsis-div">
+                                        <span class="asset_name">占位符：资产名称</span>
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <span class="asset_value">占位符：余额</span>
+                                    </div>
+                                    <div class="col-xs-5 ellipsis-div">
+                                        <span class="asset_issuer">发行人</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <div class="row status">
+                        <div class="col-sm-8">
+                            <div class="lang-height"></div>
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0">
+                                    <span class="local_process">0</span>%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="div_height col-sm-4 text-right lang-height2"><span class="local_height">0</span><span>/</span><span class="remote_height">0</span></div>
+                    </div>
+
+                    <div id="Account_TransactionList">
+                        <h3 class="page-header lang-my-tx-list"></h3>
+                        <div class="my-table striped">
+                            <div class="row title">
+                                <div class="col-sm-3 col-xs-4 lang-tx-time"></div>
+                                <div class="col-sm-6 col-xs-4 lang-tx-id"></div>
+                                <div class="col-sm-3 col-xs-4 lang-tx-type"></div>
+                            </div>
+                            <div class="empty text-center lang-no-tx"></div>
+                            <ul>
+                                <li class="row" style="display:none">
+                                    <div class="col-sm-3 col-xs-12 tx-time">2016/11/2 16:41:52</div>
+                                    <div class="col-sm-6 col-xs-6 select">
+                                        <a class="tx-id">cea66dc84f5f2aa4fbbbbd0bb2211ca58ac33ac647a3a88fda80640c391f2940</a>
+                                    </div>
+                                    <div class="col-sm-3 col-xs-6 tx-type">ctTransaction</div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Tab_Account_Receive" class="form-horizontal tab-pane">
+                    <h3 class="page-header lang-receiver-address"></h3>
+                    <div class="row">
+                        <div id="receiver_info" class="col-lg-8 col-md-9 col-sm-10 select">
+                            <div class="bs-callout bs-callout-info">
+                                <h4 class="lang-tips"></h4>
+                                <p class="lang-receive-backup"></p>
+                            </div>
+                            <button class="btn btn-success tab-trigger lang-receive-gotobackup" href="#Tab_Wallet_Backup"></button>
+                        </div>
+                        <div id="receiver_address" class="col-lg-6 col-md-7 col-sm-10 select">
+                            <pre class="select text-center">
+                                <span id="qrcode"></span>
+                                <span id="receiver"></span><i style="display:none" id="copy-addr" class="iconfont">&#xe689;</i>
+                            </pre>
+                            <a id="show_prikey" href="javascript:" class="lang-check-privatekey"></a>
+                        </div>
+                        <div class="col-sm-12">
+                            <button id="btnQRcode" class="btn btn-primary" style="display:none" onclick="showQRcode()"></button><br><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="Tab_Account_Send" class="form-horizontal tab-pane">
+                    <form id="form_account_send" autocomplete="off">
+                        <h3 class="page-header lang-asset-transfer"></h3>
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <h5 class="lang-select-asset"></h5>
+                                <select id="transfer_asset" name="transfer_asset" class="form-control" data-val="true"></select>
+                                <span class="text-danger" data-valmsg-for="transfer_asset" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="lang-max-to-transfer"><span class="asset-amount text-success">0</span></div>
+                        <h5 class="lang-receiver"></h5>
+                        <div class="form-group">
+                            <div class="col-sm-9" style="margin-bottom:10px">
+                                <div class="input-group">
+                                    <input id="transfer_txout" name="transfer_txout" data-val="true" data-val-regex-pattern="A[F-HJ-NP-Za-f][1-9A-HJ-NP-Za-km-z]{32}" class="pay_address" type="text" />
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle lang-contact-btn" data-toggle="dropdown"><span class="caret"></span></button>
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                            <li class="row" style="display:none">
+                                                <div class="col-xs-4 contact-name">点位符：联系人名称</div>
+                                                <div class="col-xs-8 contact-address">点位符：AQVh2pG732YvtNaxEGkQUei3YA4cvo7d2i</div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <span class="text-danger" data-valmsg-for="transfer_txout" data-valmsg-replace="true"></span>
+                            </div>
+                            <div class="col-sm-3" style="margin-bottom:10px">
+                                <input id="transfer_value" name="transfer_value" data-val="true" class="pay_value" data-val-regex-pattern="\d+(\.\d+)?" type="text" />
+                                <span class="text-danger" data-valmsg-for="transfer_value" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-success lang-confirm-transfer" type="submit" onclick="event.preventDefault()"></button>
+                    </form>
+                </div>
+                <div id="Tab_Contacts_Index" class="form-horizontal tab-pane">
+                    <h3 class="page-header lang-my-contacts"></h3>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <button type="button" class="btn tab-trigger btn-success lang-create-contact" id="create_contact" href="#Tab_Contacts_Create"></button>
+                        </div>
+                        <input type="hidden" id="contact_name_selected" />
+                        <input type="hidden" id="contact_address_selected" />
+                    </div>
+                    <div class="my-table striped click">
+                        <div class="row title">
+                            <div class="col-sm-3 col-xs-5 lang-name"></div>
+                            <div class="col-sm-5 col-xs-7 lang-address"></div>
+                            <div class="col-sm-4 col-xs-12"></div>
+                        </div>
+                        <div class="empty text-center lang-no-contact"></div>
+                        <ul>
+                            <li class="row" style="display:none">
+                                <div class="col-sm-3 col-xs-5 contact-name select">Peter Lin</div>
+                                <div class="col-sm-5 col-xs-7 contact-address select">AXd4TZaSVe6jECWrse5GCtoG1Lhi8YmbE6</div>
+                                <div class="col-sm-4 col-xs-12 contact-action" style="display:none">
+                                    <button class="btn btn-sm btn-danger lang-delete" type="button" data-toggle="modal" data-target="#deleteModal"></button>
+                                    <button class="btn btn-sm btn-info btn-send lang-send" type="button"></button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="Tab_Contacts_Create" class="form-horizontal tab-pane">
+                    <form id="form_create_contact" autocomplete="off">
+                        <h3 class="page-header lang-create-contact"></h3>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-name"></label>
+                            <div class="col-sm-6">
+                                <input name="contact_name" id="contact_name" type="text" data-val="true" data-val-length-max="20" />
+                                <span class="text-danger" data-valmsg-for="contact_name" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label lang-address"></label>
+                            <div class="col-sm-6">
+                                <input name="contact_address" id="contact_address" type="text" data-val="true" data-val-regex-pattern="A[F-HJ-NP-Za-f][1-9A-HJ-NP-Za-km-z]{32}" />
+                                <span class="text-danger" data-valmsg-for="contact_address" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-4 col-md-push-4 col-sm-push-4">
+                                <button id="create_contact" type="button" class="btn btn-success lang-create-contact"></button> <!--如果不加preventDefault会跳转空白页面-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- 测试用的开发人员工具 -->
+                <div id="Tab_Advanced_DeveloperTool" class="form-horizontal tab-pane">
+                    <h3 class="page-header lang-developer-tool" onclick="showDeleteWallet()"></h3>
+                    <div>
+                        <h4>节点信息</h4>
+                        <div>当前连接节点：<span id="seed"></span></div>
+                        <button id="refresh_nood" class="btn btn-success">刷新</button>
+                        <br /><br />
+                    </div>
+                    <div>
+                        <h4>设备信息</h4>
+                        <div>platform：<span id="platform">null</span></div>
+                        <div>version：<span id="version">null</span></div>
+                        <button id="refresh_device" class="btn btn-success">刷新</button>
+                        <br />
+                    </div>
+                    <div id="delete_all_wallet">
+                        <h5 class="text-danger">删除所有钱包，请谨慎操作</h5>
+                        <button id="delete_wallet" type="button" class="btn btn-danger">删除所有钱包</button>
+                        <br /><br />
+                    </div>
+                    <div>
+                        <h5>设置钱包为未备份状态</h5>
+                        <button id="no_backup" type="button" class="btn btn-success">设置</button>
+                        <br /><br />
+                    </div>
+                    <div>
+                        <form id="form_dev_tool" autocomplete="off">
+                            <h5>手动设置钱包同步高度</h5>
+                            <p>指定一个高度，让钱包从此高度开始同步，设置同步高度不会影响已同步数据</p>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <input type="text" id="input_curent_height" name="input_curent_height" class="form-control" data-val="true" data-val-required="请指定一个高度，让钱包从此高度开始同步" />
+                                    <span class="text-danger" data-valmsg-for="input_curent_height" data-valmsg-replace="true"></span>
+                                </div>
+                                <div class="col-xs-4">
+                                    <button id="set_height" type="submit" onclick="event.preventDefault()" class="btn btn-success">确定</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div id="Tab_Advanced_DebugLog" class="form-horizontal tab-pane">
+                    <button id="debug1" class="btn btn-primary" onclick="event.preventDefault();">test1</button><br/><br/>
+                    <div id="debugLog"></div>
+                </div>
+                <div id="Tab_Help_Help" class="tab-pane">
+                    <h3 class="page-header lang-help"></h3>
+                    <div id="zh_help">
+                        QQ群：573816801
+                    </div>
+                    <div id="en_help">
+                        Slack:<a href="https://antshares-slack.herokuapp.com/">neo-slack</a>
+                        <br />
+                        Twiter:<a href="https://twitter.com/antshares">Neo</a>
+                    </div>
+                </div>
+                <div id="Tab_Help_About" class="tab-pane">
+                    <h3 class="page-header lang-about"></h3>
+                    <div id="zh_about" class="select">
+                        <p>
+                            Neo是基于区块链技术，将实体世界的资产和权益进行数字化，通过点对点网络进行登记发行、转让交易、清算交割等金融业务的去中心化网络协议。
+                        </p>
+                        <p>
+                            这是一个离线钱包，所有代码均在您的浏览器端执行，钱包文件、私钥均不会上传给服务器，因此Neo团队不能帮您保存、恢复钱包文件，请务必将钱包文件和私钥导出并妥善保管。
+                        </p>
+                        <br />
+                        
+                        <p>QQ群：573816801</p>
+                        <p>开发团队： <a href="mailto:dev@antshares.org">dev@neo.org</a></p>
+                        <p>官方网站： <a href="http://www.neo.org">www.neo.org</a></p>
+                        <p>区块链浏览器： <a href="https://antchain.xyz/">www.antchain.xyz</a></p>
+                        <p>&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&#12288;&nbsp;<a href="http://antcha.in/">www.antcha.in</a></p>
+                        <br />
+                        <br />
+                        <p>版权所有： Neo团队 © 2014 - 2017</p>
+                        <img style="width:140px;" src="img/wechat.jpg" />
+                    </div>
+                    <div id="en_about" class="select">
+                        <p>
+                            Neo is a decentralized and distributed network protocol which is based on blockchain technology. People can use it to digitalize assets or shares, and accomplish some financial business through peer-to-peer network such as registration and issuing, make transactions, settlement and payment.
+                        </p>
+                        <br />
+                        <p>
+                            This is an offline wallets, all the code in your browser-side implementation, wallet file and the private key will not be uploaded to the server, so TAT(The Neo Team) cannot help you save or recover the wallet file, please be sure to export your wallet file and private key and keep it safe.
+                        </p>
+                        <br />
+                        <p>Slack: <a href="https://antshares-slack.herokuapp.com/">antshares-slack</a></p>
+                        <p>Twiter: <a href="https://twitter.com/antshares">antshares</a></p>
+                        <p>Development Team: <a href="mailto:dev@antshares.org">dev@antshares.org</a></p>
+                        <p>Official website: <a href="https://www.antshares.org">www.antshares.org</a></p>
+                        <p>Copyright: Neo Team © 2014 - 2017</p>
+                    </div>
+                </div>
+                <div id="Tab_Help_Privacy_Policy" class="tab-pane">
+                    <h3 class="page-header lang-privacy"></h3>
+                    <div id="zh_privacy" class="select">
+                        <p>
+                            使用该钱包之前，请了解加密数字货币以及基于区块链的开源软件使用时所遇到的各种风险，同时，如果您不熟悉钱包、 账户、合约等术语， 请先登录Neo官网了解有关这些关键术语的信息。
+                        </p>
+                        <h5>一、您如何访问和控制自己的钱包信息</h5>
+                        <p>
+                            该钱包并不会通过网络收集您的各种私人信息，例如钱包密码、私钥等，Neo团队将尽一切可能采取适当的技术手段，保证您可以访问、更新自己的钱包信息。在访问、更新、和删除前述信息时，我们提醒您务必完成钱包备份操作，以保障财产安全。
+                        </p>
+                        <h5>二、您如何保护自己的钱包安全</h5>
+                        <p>
+                            2.1 Neo团队会使用各种安全技术和程序，以防信息的丢失、不当使用、未经授权阅览或披露。例如，我们将利用加密技术（例如SSL）来保护您提供的个人信息。但请您理解，由于技术的限制以及可能存在的各种恶意手段，即便竭尽所能加强安全措施，也不可能始终保证信息百分之百的安全。您需要了解，在接入我们的服务所用的系统和通讯网络，有可能因我们可控范围外的因素而出现问题。例如，您下载安装的其他软件或访问的其他网站中可能含有病毒、木马程序或其他恶意程序，威胁钱包的信息和数据安全等。因此，您应当加强信息安全及个人信息的保护意识，注意对钱包的信息保护，以免遭受损失。
+                            <br />2.2 在任何情况下，您不应轻信各种涉及财产的网络信息。涉及财产操作的，请一定先核实对方身份，并请经常留意Neo团队有关防范诈骗犯罪的提示。
+                            <br />2.3 您不得制作、发布、使用、传播用于窃取微信帐号及他人个人信息、财产的恶意程序。
+                            <br />2.4 维护软件安全与正常使用是Neo团队和你的共同责任，Neo将按照行业标准合理审慎地采取必要技术措施保护你的终端设备信息和数据安全，但是您承认和同意Neo团队并不能就此提供完全保证。
+                        </p>
+                        <h5>三、隐私政策的变更</h5>
+                        <p>
+                            如果我们决定变更隐私政策，会在钱包的《隐私政策》一栏中说明。
+                            该政策最后编辑日期 2016/11/11
+                        </p>
+                        <h5>四、联系我们</h5>
+                        <p>
+                            如果您有任何关于此隐私政策的疑问，请通过以下途径联系我们：
+                            <a href="mailto:dev@antshares.org">dev@neo.org</a>
+                        </p>
+                        <br />
+                        <p><small>以上所有解释权归Neo团队所有，并受 <a href="https://github.com/AntShares/AntShares/blob/master/LICENSE">MIT开源协议</a> 保护。</small></p>
+                    </div>
+                    <div id="en_privacy" class="select">
+                        <p>
+                            Before using the wallet software, you should be capable of acknowledging risks associated with crypto-currency and blockchain-based open-source software. In the meantime, if you are not familiar with terminologies like wallet, account and/or contract, we strongly advise you to visit Neo’ official website to learn more.
+                        </p>
+                        <h4>I. Accessing and Controlling Wallet Information</h4>
+                        <p>
+                            The Wallet does not gather your private information via Internet connection, such as the password and the private keys. The Neo Team will do everything we can to take appropriate technical measures to guarantee your access to the wallet information and keep you updated. When accessing, updating or deleting the aforementioned information, we mind you to back up the wallet files beforehand to best protect your property rights.
+                        </p>
+                        <h4>II. Protecting Wallet Security</h4>
+                        <p>
+                            2.1 The Neo Team will implement various kinds of security techniques and programs to protect against data loss, inappropriate usage, unauthorized access and/or disclosure. For example, we implement encryption techniques such as SSL to protect your personal information. Be advised that due to limitations of technology and possible hostile actions, no matter how strong the securities are, a 100% information security cannot be guaranteed. You should acknowledge the possibility that the system and telecommunication network you used to access our service could be compromised, which is out of our control. A possible scenario could be the software you have downloaded or websites you have visited contained virus, Trojan Horse or other malwares that pose threats to the security of wallet information. Therefore, it is imperative for you to strengthen the awareness of protecting personal information and data security, especially those of the wallet, in case of loss.
+                            <br />2.2 Under no circumstances you should easily place trust on property-concerned information on the Internet. Any related operations should only take place after you have fully vetted the counterparty identity. Please be updated constantly with the anti-scam notices published on our website.
+                            <br />2.3 You should not try to produce, publish, use or spread malwares for stealing WeChat account and/or other personal information and properties.
+                            <br />2.4 It is a common responsibility of The Neo Team and you to protect software security and functionality. Neo will take appropriate technical measures that are in accordance with industrial standards to protect the data security on your terminal device. But hereby you acknowledge and agree that The Neo Team cannot provide a 100% guarantee of the aforementioned securities.
+                        </p>
+                        <h4>III. Changes to Privacy Policies</h4>
+                        <p>
+                            Should we decide to change the privacy policies, we shall conduct formal illustrations in the [Privacy Policy] section in the wallet beforehand. The policies hereof are edited finally to this date of November 11th 2016.
+                        </p>
+                        <h4>IV. Contact Us</h4>
+                        <p>
+                            Should you have any question regarding the privacy policies hereof, you can contact us via
+                            <a href="mailto:dev@antshares.org">dev@neo.org</a>
+                        </p>
+                        <br />
+                        <p><small>The Neo Team reserves the right of final interpretation of the aforementioned clauses, which are under the protection of <a href="https://github.com/AntShares/AntShares/blob/master/LICENSE">MIT open source protocol</a>.</small></p>
+                    </div>
+                </div>
+                <div id="Tab_Wallet_Validate"  class="form-horizontal tab-pane">
+                    <div class="gesture-password">
+                        <div id="gesturepwdValidate"></div>
+                    </div>
+                    <div class="text-center lang-draw-unlock-pattern"></div>
+                </div>
+                <div id="Tab_Wallet_GesturePassword" class="form-horizontal tab-pane">
+                    <br /><br />
+                    <div style="text-align:center" ><img src="img/logo-sm.png" style="width:100px" /></div><br/>
+                    <div class="text-center lang-draw-unlock-pattern"></div><br />
+                    <div class="gesture-password">
+                        <div id="gesturepwdSet"></div>
+                    </div>
+                    <div id="" class="col-lg-8 col-md-9 col-sm-10 select">
+                        <div class="bs-callout bs-callout-info">
+                            <h4 class="lang-tips"></h4>
+                            <p class="">请输入两次手势密码以完成设置</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer>
+                <div>
+                    <a class="col-xs-4 tab-trigger lang-receive withripple" href="#Tab_Account_Receive">
+                        <i class="iconfont">&#xe6ab;</i>
+                    </a>
+                    <a class="col-xs-4 tab-trigger lang-home withripple" href="#Tab_Account_Index">
+                        <i class="iconfont">&#xe686;</i>
+                    </a>
+                    <a class="col-xs-4 tab-trigger lang-send withripple" href="#Tab_Account_Send">
+                        <i class="iconfont">&#xe610;</i>
+                    </a>
+                </div>
+            </footer>
+        </div>
+        <nav id="menu" class="mm-theme-dark">
+            <div>
+                <ul>
+                    <li id="menu_wallet_start" class="withripple">
+                        <a class="fist-menu tab-trigger lang-start" href="#Tab_Wallet_Start"><i class="iconfont">&#xe62e;</i></a>
+                    </li>
+                    <li id="menu_wallet_open" class="withripple">
+                        <a class="fist-menu tab-trigger lang-open-wallet" href="#Tab_Wallet_Open"><i class="iconfont">&#xe62e;</i></a>
+                    </li>
+                    <li class="short-hidden withripple">
+                        <a class="fist-menu tab-trigger lang-home" href="#Tab_Account_Index"><i class="iconfont">&#xe686;</i></a>
+                    </li>
+                    <li class="short-hidden withripple">
+                        <a class="fist-menu tab-trigger lang-receive" href="#Tab_Account_Receive"><i class="iconfont">&#xe6ab;</i></a>
+                    </li>
+                    <li class="short-hidden withripple">
+                        <a class="fist-menu tab-trigger lang-send" href="#Tab_Account_Send"><i class="iconfont">&#xe610;</i></a>
+                    </li>
+                    <li class="withripple">
+                        <a class="fist-menu tab-trigger lang-contacts" href="#Tab_Contacts_Index"><i class="iconfont">&#xe635;</i></a>
+                    </li>
+                    <li class="withripple">
+                        <a class="fist-menu tab-trigger lang-backup-wallet" href="#Tab_Wallet_Backup"><i class="iconfont">&#xe605;</i></a>
+                    </li>
+                    <!--<li class="sshort-hidden withripple">
+                        <a class="fist-menu" id="blockchain_browser" onclick="browserClick()"><i class="iconfont">&#xe60f;</i>AntCha.in<i class="iconfont link">&#xe60b;</i></a>
+                    </li>-->
+                    <li class="withripple">
+                        <span class="lang-system-setup"><i class="iconfont">&#xe601;</i></span>
+                        <ul>
+                            <li><a class="tab-trigger lang-change-password" href="#Tab_Wallet_ChangePassword"></a></li>
+                            <!--<li><a class="tab-trigger lang-setup-gesture" href="#Tab_Wallet_GesturePassword"></a></li>-->
+                        </ul>
+                    </li>
+                    <li class="withripple">
+                        <a class="fist-menu tab-trigger lang-privacy" href="#Tab_Help_Privacy_Policy"><i class="iconfont">&#xe7a3;</i></a>
+                    </li>
+                    <li class="withripple">
+                        <a class="fist-menu tab-trigger lang-about" href="#Tab_Help_About"><i class="iconfont">&#xe685;</i></a>
+                    </li>
+                    <li id="developer_tool" style="display:none"  class="withripple">
+                        <a class="fist-menu tab-trigger lang-developer-tool" href="#Tab_Advanced_DeveloperTool"><i class="iconfont">&#xe66d;</i></a>
+                    </li>
+                    <li id="debug_log" style="display:none"  class="withripple">
+                        <a class="fist-menu tab-trigger" href="#Tab_Advanced_DebugLog"><i class="iconfont">&#xe66d;</i>调试信息</a>
+                    </li>
+                </ul>
+                <div class="menu-progress" style="display:none">
+                    <div class="lang-height"></div>
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0">
+                            <span class="local_process">0</span>%
+                        </div>
+                    </div>
+                    <div class="lang-height2"><span class="local_height">0</span><span>/</span><span class="remote_height">0</span></div>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <script src="lib/jQuery.mmenu/dist/core/js/hammer.js"></script>
+    <script src="lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="lib/bootstrap-fileinput/js/fileinput.min.js"></script>
+    <script src="lib/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+    <script src="lib/jQuery.mmenu/dist/core/js/jquery.mmenu.dragclose.min.js"></script>
+    <script src="lib/bootstrap-material-design/js/material.js"></script>
+    <script src="lib/bootstrap-material-design/js/ripples.js"></script>
+    <!-- Cordova 引用，它在生成应用程序时添加到其中。 -->
+    <script src="cordova.js"></script>
+    <script src="scripts/platformOverrides.js"></script>
+    <script src="scripts/appBundle.js"></script>
+    <script src="scripts/set_language.js"></script>
+    <script src="scripts/SocialSharing.js"></script>
+    <script src="scripts/jquery.gesture.password.js"></script>
+    <script src="scripts/jquery.qrcode.min.js"></script>
+    <script>
+        $("input[type='text']").addClass("form-control");
+        $("input[type='password']").addClass("form-control");
+    </script>
+
+    <script type="text/javascript">
+        window.mobilecheck = function ()
+        {
+            var check = false;
+            (function (a, b) { if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0, 4))) check = true })(navigator.userAgent || navigator.vendor || window.opera);
+            return check;
+        }
+
+
+        //初始化侧边栏
+        $('nav#menu').mmenu({
+            extensions: ["pagedim-black", "widescreen"],
+            searchfield: false,
+            counters: true,
+            slidingSubmenus: false,
+            navbar: {
+                title: AntShares.UI.Resources.global.menu
+            },
+            dragOpen: { open: false },
+            dragClose: { close: true },
+            navbars: [{
+                position: 'top',
+                content: ['title']
+            }, {
+                position: 'bottom',
+                content: ['<a target="blank" href="http://www.neo.org/">www.neo.org</a>']
+            }]
+        });
+
+        function alert(message)
+        {
+            $('.modal-body').text(message);
+            $('#myModal').modal();
+        }
+
+        var i = 1;
+        function showDevTools()
+        {
+            i++;
+            if (i % 4 == 0)
+            {
+                $("#developer_tool").show();
+                $("#debug_log").show();
+            }
+            else
+            {
+                $("#developer_tool").hide();
+                $("#debug_log").hide();
+            }
+        }
+        var j = 1;
+        function showDeleteWallet()
+        {
+            j++;
+            if (j % 4 == 0)
+                $("#delete_all_wallet").show();
+            else
+                $("#delete_all_wallet").hide();
+        }
+
+        function showQRcode()
+        {
+            console.log($("#receiver").text());
+            $("#qrcode").html("").qrcode($("#receiver").text());
+        }
+
+        function browserClick(){
+            cordova.InAppBrowser.open("http://antcha.in", "_blank", "location=no");
+        }
+
+        $.material.init();
+    </script>
+    <div class="modal fade" id="downloadAPP" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="row" style="padding:20px 10px">
+                    <div class="col-xs-8" style="padding-right:0">
+                        <img src="img/logo-sm.png" style="width:40px; float:left; margin-right:10px" />
+                        <strong>Neo</strong>
+                        <div id="download_div" style="padding-left:50px">更多功能尽在手机客户端</div>
+                    </div>
+                    <div class="col-xs-4 text-right" style="padding-left:0">
+                        <a id="download_link" class="btn btn-primary">立即下载</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body wrap lang-confirm-delete" style="word-break:break-all;">
+                    
+                </div>
+                <div class="modal-footer">
+                    <button id="btn_delte_contact" type="button" class="btn btn-danger lang-delete"></button>
+                    <button type="button" class="btn btn-default lang-cancel" data-dismiss="modal"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body wrap" style="word-break:break-all;">
+                    ...
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
