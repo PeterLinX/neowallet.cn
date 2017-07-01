@@ -21,36 +21,42 @@
             $("#my_ans").text("0");
             $("#my_anc").text("0");
 
-            let tx_ul = $("#Account_TransactionList").find("ul:eq(0)");
-            tx_ul.find("li.add").remove();
-            this.db = new AntShares.Implementations.Wallets.IndexedDB.WalletDataContext(Global.Wallet.dbPath);
-            this.db.open().then(() =>
-            {
-                this.loadTransactionList();
-            });
-            let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
-            asset_ul.find(".add").remove();
+            //let tx_ul = $("#Account_TransactionList").find("ul:eq(0)");
+            //tx_ul.find("li.add").remove();
+            //this.db = new AntShares.Implementations.Wallets.IndexedDB.WalletDataContext(Global.Wallet.dbPath);
+            //this.db.open().then(() =>
+            //{
+            //    this.loadTransactionList();
+            //});
 
-            let coins = Global.Wallet.findCoins();
+            //let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
+            //asset_ul.find(".add").remove();
+
+            //let coins = Global.Wallet.findCoins();
 
             let map = new Map<string, { assetId: Uint256, amount: Fixed8 }>();
 
-            for (let i = 0; i < coins.length; i++)
-            {
-                if (coins[i].state != Wallets.CoinState.Unspent && coins[i].state != Wallets.CoinState.Unconfirmed)
-                    continue;
-                let key = coins[i].assetId.toString();
-                if (map.has(key))
-                {
-                    let item = map.get(key);
-                    item.amount = item.amount.add(coins[i].value);
-                }
-                else
-                {
-                    map.set(key, { assetId: coins[i].assetId, amount: coins[i].value });
-                }
-            }
-            map.forEach(Index.addCoinList);            
+            //for (let i = 0; i < coins.length; i++)
+            //{
+            //    if (coins[i].state != Wallets.CoinState.Unspent && coins[i].state != Wallets.CoinState.Unconfirmed)
+            //        continue;
+            //    let key = coins[i].assetId.toString();
+            //    if (map.has(key))
+            //    {
+            //        let item = map.get(key);
+            //        item.amount = item.amount.add(coins[i].value);
+            //    }
+            //    else
+            //    {
+            //        map.set(key, { assetId: coins[i].assetId, amount: coins[i].value });
+            //    }
+            //}
+            //TODO: 获取balance
+            map.forEach(Index.addCoinList);
+
+
+
+
         }
 
         private OnShowMore =()=>
