@@ -12,7 +12,15 @@
             }
         }
 
-        
+        public getHeight1() {
+            let url = this.rootURL + "/height";
+            debugLog(url);
+            $.get(url, data => {
+
+                debugLog(data);
+            });
+        }
+
         public getHeight(): JQueryPromise<any> {
             let url = this.rootURL+"/height";
             debugLog(url);
@@ -26,18 +34,11 @@
             });
         }
 
-        public postTransfer(): JQueryPromise<any> {
-            let url = this.rootURL + "/transfer";
-            let params = {};
-            params['source'] = "AdinFgnkM1G3N1uw9FA1UEmRmttmwE6DsC";
-            params['dests'] = "AdinFgnkM1G3N1uw9FA1UEmRmttmwE6DsC";
-            params['amounts'] = "1";
-            params['assetId'] = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
-
+        public getBlock(height: number): JQueryPromise<any> {
+            let url: string = this.rootURL + "/block/"+height;
             debugLog(url);
             return $.ajax({
-                type: "POST",
-                data: params,
+                type: "GET",
                 dataType: "json",
                 headers: { "Accept": "application/json" },
                 contentType: 'application/json',
@@ -46,18 +47,11 @@
             });
         }
 
-        public postTransfer2(): JQueryPromise<any> {
-            let url = this.rootURL + "/transfer";
-            let params = {};
-            params['source'] = "AdinFgnkM1G3N1uw9FA1UEmRmttmwE6DsC";
-            params['dests'] = "AdinFgnkM1G3N1uw9FA1UEmRmttmwE6DsC";
-            params['amounts'] = "1";
-            params['assetId'] = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
-
+        public getTx(txid: string): JQueryPromise<any> {
+            let url: string = this.rootURL + "/transaction/" + txid;
             debugLog(url);
             return $.ajax({
-                type: "POST",
-                data: JSON.stringify(params),
+                type: "GET",
                 dataType: "json",
                 headers: { "Accept": "application/json" },
                 contentType: 'application/json',
@@ -66,28 +60,55 @@
             });
         }
 
-        public getHeight1(){
-            let url = this.rootURL + "/height";
+        public getAddr(addr: string): JQueryPromise<any> {
+            let url: string = this.rootURL + "/address/" + addr;
             debugLog(url);
-            $.get(url, data => {
-
-                debugLog(data);
+            return $.ajax({
+                type: "GET",
+                dataType: "json",
+                headers: { "Accept": "application/json" },
+                contentType: 'application/json',
+                url: url,
+                timeout: 3 * 1000
             });
         }
 
-        public postTransfer1() {
-            let data = {source:"", dests:"", amounts:"", assetId:""};
-            data.source = "AddZkjqPoPyhDhWoA8f9CXQeHQRDr8HbPo";
-            data.dests = "AdinFgnkM1G3N1uw9FA1UEmRmttmwE6DsC";
-            data.amounts = "1";
-            data.assetId = "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b";
+        public postOnTransfer(source: string, dests: string, amounts: string, assetId: string): JQueryPromise<any> {
             let url = this.rootURL + "/transfer";
-            $.post(url, data => {
-
-                debugLog(data);
-            },"json");
+            let params = [];
+            params.push("source" + "=" + source);
+            params.push("dests" + "=" + dests);
+            params.push("amounts" + "=" + amounts);
+            params.push("assetId" + "=" + assetId);
+            let dataToSend = params.join("&");
+            debugLog(url);
+            debugLog(dataToSend);
+            return $.ajax({
+                type: "POST",
+                data: dataToSend,
+                contentType: 'application/x-www-form-urlencoded',
+                url: url,
+                timeout: 3 * 1000
+            });
         }
 
+        public postBroadcast(pubKey: string, signature: string, tx: string): JQueryPromise<any> {
+            let url = this.rootURL + "/broadcast";
+            let params = [];
+            params.push("publicKey" + "=" + pubKey);
+            params.push("signature" + "=" + signature);
+            params.push("transaction" + "=" + tx);
+            let dataToSend = params.join("&");
+            debugLog(url);
+            debugLog(dataToSend);
+            return $.ajax({
+                type: "POST",
+                data: dataToSend,
+                contentType: 'application/x-www-form-urlencoded',
+                url: url,
+                timeout: 3 * 1000
+            });
+        }
 
         //public static registerTx(accessToken: string, address: string, fileText: string): JQueryPromise<any>
         //{

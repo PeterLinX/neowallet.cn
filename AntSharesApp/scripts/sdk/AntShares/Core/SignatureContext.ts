@@ -5,7 +5,7 @@ namespace AntShares.Core
         public signable: ISignable;
         public scriptHashes: Uint160[];
         private redeemScripts: ArrayBuffer[];
-        private signatures: Map<string, ArrayBuffer>[];
+        public signatures: Map<string, ArrayBuffer>[];
         private completed: boolean[];
         private typeName: string;
 
