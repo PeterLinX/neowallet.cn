@@ -296,3 +296,4 @@ function debugLog(p: any) {
     console.log(p);
     $("#debugLog").prepend(p + "|" + new Date().toLocaleString()+ "</br>");
 }
+

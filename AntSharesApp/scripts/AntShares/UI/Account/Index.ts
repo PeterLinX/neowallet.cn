@@ -19,7 +19,8 @@
                 return;
             }
             setTitle(1);
-
+            this.circle();
+            
             $("#Tab_Account_Index #my_ans").text("0");
             $("#Tab_Account_Index #my_anc").text("0");
             $("#Tab_Account_Index .pay_value").val("");
@@ -64,6 +65,24 @@
                 return this.loadContactsList();
             }).catch(e => {
                 debugLog(e.message);
+            });
+        }
+
+        private circle = () => {
+            $("#circli").empty();
+            $("#circli").circliful({
+                animation: 1,
+                animationStep: 5,
+                foregroundBorderWidth: 15,
+                backgroundBorderWidth: 15,
+                percent: 100,
+                textSize: 28,
+                textStyle: 'font-size: 12px;',
+                textColor: '#666',
+                multiPercentage: 1,
+                percentages: [10, 20, 30]
+            }, () => {
+                this.circle();
             });
         }
 
