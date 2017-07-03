@@ -21,7 +21,7 @@
             });
         }
 
-        public getHeight(): JQueryPromise<any> {
+        public getHeight2(): JQueryPromise<any> {
             let url = this.rootURL+"/height";
             debugLog(url);
             return $.ajax({
@@ -34,14 +34,21 @@
             });
         }
 
+        public getHeight(): JQueryPromise<any> {
+            let url = this.rootURL + "/height";
+            debugLog(url);
+            return $.ajax({
+                type: "GET",
+                url: url,
+                timeout: 3 * 1000
+            });
+        }
+
         public getBlock(height: number): JQueryPromise<any> {
             let url: string = this.rootURL + "/block/"+height;
             debugLog(url);
             return $.ajax({
                 type: "GET",
-                dataType: "json",
-                headers: { "Accept": "application/json" },
-                contentType: 'application/json',
                 url: url,
                 timeout: 3 * 1000
             });
@@ -52,9 +59,6 @@
             debugLog(url);
             return $.ajax({
                 type: "GET",
-                dataType: "json",
-                headers: { "Accept": "application/json" },
-                contentType: 'application/json',
                 url: url,
                 timeout: 3 * 1000
             });
@@ -65,9 +69,6 @@
             debugLog(url);
             return $.ajax({
                 type: "GET",
-                dataType: "json",
-                headers: { "Accept": "application/json" },
-                contentType: 'application/json',
                 url: url,
                 timeout: 3 * 1000
             });
