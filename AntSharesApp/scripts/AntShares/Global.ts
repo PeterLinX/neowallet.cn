@@ -6,6 +6,8 @@ namespace AntShares {
         public static isDebug: boolean = true;
         public static isConnected: boolean = false;
         public static reConnectMultiplier: number = 15;
+        public static height: number = 0;
+        public static count: number = 0;
 
         public static RestClient = new Network.REST.RestClient("http://api.otcgo.cn", Global.isMainNet);
 

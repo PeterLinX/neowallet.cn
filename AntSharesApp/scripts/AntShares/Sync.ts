@@ -89,7 +89,29 @@
 
         }
 
+        public static timer = () => {
+            setTimeout(() => {
+                //Global.RestClient.getHeight().then(response => {
+                //    let height: JSON = JSON.parse(response);
+                //    Global.height = height["height"];
+                //}).then(() => {
+                    
+                //    });
+                if (Global.count == 21) {
+                    Global.count = 0;
+                    Global.RestClient.getHeight().then(response => {
+                        let height: JSON = JSON.parse(response);
+                        Global.height = height["height"];
+                    })
+                }
+                $("#countTimer").text(Global.count);
+                Global.count++;
+                debugLog(Global.height);
+                AntShares.Sync.timer();
+            }, 1000);
+        }
     }
 
     AntShares.Sync.connectNode(Global.isMainNet);
+    AntShares.Sync.timer();
 }

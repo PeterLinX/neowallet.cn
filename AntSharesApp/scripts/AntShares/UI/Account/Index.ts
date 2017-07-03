@@ -6,6 +6,7 @@
         private address: string;
         private strTx: string;
         private assets: Map<Core.RegisterTransaction, Fixed8>;
+        private count: number;
 
         protected oncreate(): void
         {
@@ -14,13 +15,17 @@
         }
 
         protected onload(): void {
+            this.count = 0;
             if (Global.Wallet == null) {
                 TabBase.showTab("#Tab_Wallet_Open");
                 return;
             }
             setTitle(1);
-            this.circle();
-            
+            //this.circle();
+            //this.timer();
+
+            //this.syncHeight(Global.height);
+
             $("#Tab_Account_Index #my_ans").text("0");
             $("#Tab_Account_Index #my_anc").text("0");
             $("#Tab_Account_Index .pay_value").val("");
@@ -35,7 +40,6 @@
                 this.address = addr;
                 return this.loadBalance(addr);
             }).then(() => {
-                debugLog(this.map);
                 //return this.map.forEach(this.addCoinList);
                 let promises = new Array<PromiseLike<void>>();
                 let j = 0;
@@ -68,6 +72,40 @@
             });
         }
 
+        private timer = () => {
+            setTimeout(() => {
+                if (this.count == 21) {
+                    TabBase.showTab("#Tab_Account_Index");
+                }
+                $("#countTimer").text(this.count);
+                this.count++;
+                this.timer();
+            }, 1000);
+        }
+
+        private syncHeight = (height: number): JQueryPromise<any>  => {
+            if (height == 0) {
+                return Global.RestClient.getHeight().then(response => {
+                    let height: JSON = JSON.parse(response);
+                    Global.height = height["height"];
+                    return this.syncHeight(Global.height);
+                });
+            }
+            else {
+                return Global.RestClient.getHeight().then(response => {
+                    let height: JSON = JSON.parse(response);
+                    debugLog(Global.height);
+                    if (height["height"] - Global.height >= 1) {
+                        Global.height = height["height"];
+                        TabBase.showTab("#Tab_Account_Index");
+                    } else {
+                        return this.syncHeight(Global.height);
+                    }
+                });
+            }
+            
+        }
+
         private circle = () => {
             $("#circli").empty();
             $("#circli").circliful({
@@ -96,7 +134,6 @@
         private loadBalance = (addr: string): JQueryPromise<any> => {
             return Global.RestClient.getAddr(addr).then(response => {
                 let addr: JSON = JSON.parse(response);
-                debugLog(addr["balances"]);
                 let balances = addr["balances"];
                 for (var key in balances) {
                     this.map.set(key, { assetId: Uint256.parse(key), amount: Fixed8.parse(balances[key]) });
@@ -122,10 +159,8 @@
                 let context: Core.SignatureContext;
                 let tx: Core.ContractTransaction;
                 Promise.resolve(1).then(() => {
-                    debugLog("source: " + this.address);
                     return this.loadTx(this.address, dests, amounts, assetId);
                 }).then(() => {
-                    debugLog("strTx: " + this.strTx);
                     tx = Core.Transaction.deserializeFrom(this.strTx.hexToBytes().buffer);
                     return Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]);
                 }).then(result => {
@@ -258,7 +293,6 @@
                 contacts = result;
                 return contacts.getContacts();
             }).then(results => {
-                debugLog(results);
                 if (results.length > 0) {
                     let contactsArray = linq(results).orderByDescending(p => p.name).toArray();
                     let result = Promise.resolve();
