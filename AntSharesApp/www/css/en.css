@@ -166,3 +166,4 @@
 .lang-setup-gesture::after { content: 'Setup gesture password' }
 .lang-system-setup::after { content: 'System setup' }
 .lang-check-privatekey::after { content: 'Check your private key'}
+.lang-claim::after {content: 'Claim'}

@@ -214,15 +214,17 @@
             //url: http://api.otcgo.cn/mainnet/transfer
             //{"transaction": "800000014bfcd765505eb3b2a3761aa62d926ac9a144b19ded37419825bee14edb01df47000002d447af79bcd9ba3ebc45e67871065d101a74c4e3ab09e7cff19f0ab0f7825d0200e1f505000000002d18fdf7e7aea7a9d18b078779d13c51f6fdcf35d447af79bcd9ba3ebc45e67871065d101a74c4e3ab09e7cff19f0ab0f7825d020084d717000000002d18fdf7e7aea7a9d18b078779d13c51f6fdcf35", "result": true}
             debugLog(5);
-            let source = "AKtKzcKS5PcXFnfEcif7Zz3Vfptsc1vUYe";
-            let dests = "AKtKzcKS5PcXFnfEcif7Zz3Vfptsc1vUYe";
+            let source = "ALeCDAHg2gAJz69L6oHqP4x6JM5sJbJTEe";
+            let dests = "AaAHt6Xi51iMCaDaYoDFTFLnGbBN1m75SM";
             let amounts = "1";
             let assetId = "025d82f7b00a9ff1cfe709abe3c4741a105d067178e645bc3ebad9bc79af47d4";
+
             Global.RestClient.postOnTransfer(source, dests, amounts, assetId).then(response => {
                 debugLog(response);
                 let res: JSON = JSON.parse(response);
                 if (res["result"] == true) {
                     alert("交易成功， tx = " + res["transaction"]);
+                    this.strTx = res["transaction"];
                 }
             });
         }
@@ -279,21 +281,21 @@
 
             let publicKey = Global.Wallet.getAccounts()[0].publicKey.encodePoint(false).toHexString();
             debugLog("publicKey: " + publicKey);
-            let strTx = "8000000124bb8f3ff649dc78f97f965d8e5aa822c1c056861180d433a606a2ca11f076ff000002d447af79bcd9ba3ebc45e67871065d101a74c4e3ab09e7cff19f0ab0f7825d0200e1f50500000000c9afa5296f27c35833119ec457b19a550de4fbccd447af79bcd9ba3ebc45e67871065d101a74c4e3ab09e7cff19f0ab0f7825d020084d717000000003564cc059d00fd05137f163d7514900be0cebf88";
+            
 
-            //let tx = Core.Transaction.deserializeFrom(strTx.hexToBytes().buffer);
-            //debugLog(tx);
-            //this.signInternal(tx, Global.Wallet.getAccounts()[0]).then(signature => {
-            //    let sig: string = new Uint8Array(signature).toHexString();
-            //    debugLog(sig);
-            //    Global.RestClient.postBroadcast(publicKey, sig, strTx).then(response => {
-            //        debugLog(response);
-            //        let res: JSON = JSON.parse(response);
-            //        if (res["result"] == true) {
-            //            alert("交易成功， txid = " + res["txid"]);
-            //        }
-            //    });
-            //});
+            let tx = Core.Transaction.deserializeFrom(this.strTx.hexToBytes().buffer);
+            debugLog(tx);
+            this.signInternal(tx, Global.Wallet.getAccounts()[0]).then(signature => {
+                let sig: string = new Uint8Array(signature).toHexString();
+                debugLog(sig);
+                Global.RestClient.postBroadcast(publicKey, sig, this.strTx).then(response => {
+                    debugLog(response);
+                    let res: JSON = JSON.parse(response);
+                    if (res["result"] == true) {
+                        alert("交易成功， txid = " + res["txid"]);
+                    }
+                });
+            });
 
             //this.signMsgInternal(strTx, Global.Wallet.getAccounts()[0]).then(signature => {
             //    let sig: string = new Uint8Array(signature).toHexString();
@@ -308,24 +310,24 @@
             //    });
             //});
 
-            let tx = Core.Transaction.deserializeFrom(strTx.hexToBytes().buffer);
-            let context: Core.SignatureContext;
-            Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]).then(result => {
-                context = result;
-                return Global.Wallet.sign(context);
-            }).then(result => {
-                if (!result) throw new Error(Resources.global.canNotSign);
-                if (!context.isCompleted())
-                    throw new Error(Resources.global.thisVersion1);
-                tx.scripts = context.getScripts();
-                return tx.ensureHash();
-            }).then(() => {
-                return Global.Node.relay(tx);
-            }).then(result => {
-                alert(Resources.global.txId + tx.hash.toString());
-            }).catch(e => {
-                alert(e.message);
-            });
+            //let tx = Core.Transaction.deserializeFrom(this.strTx.hexToBytes().buffer);
+            //let context: Core.SignatureContext;
+            //Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]).then(result => {
+            //    context = result;
+            //    return Global.Wallet.sign(context);
+            //}).then(result => {
+            //    if (!result) throw new Error(Resources.global.canNotSign);
+            //    if (!context.isCompleted())
+            //        throw new Error(Resources.global.thisVersion1);
+            //    tx.scripts = context.getScripts();
+            //    return tx.ensureHash();
+            //}).then(() => {
+            //    return Global.Node.relay(tx);
+            //}).then(result => {
+            //    alert(Resources.global.txId + tx.hash.toString());
+            //}).catch(e => {
+            //    alert(e.message);
+            //});
         }
 
 
@@ -338,17 +340,10 @@
             let assetId = "025d82f7b00a9ff1cfe709abe3c4741a105d067178e645bc3ebad9bc79af47d4";
             let context: Core.SignatureContext;
             let tx: Core.ContractTransaction;
-            //this.loadContext(tx).then(result => { });
             Promise.resolve(1).then(() => {
                 return this.loadTx(source, dests, amounts, assetId);
             }).then(() => {
-                debugLog("strTx: " + this.strTx);
-                //let publicKey = Global.Wallet.getAccounts()[0].publicKey.encodePoint(false).toHexString();
                 tx = Core.Transaction.deserializeFrom(this.strTx.hexToBytes().buffer);
-                //let promises = [];
-                //promises[0] = Promise.resolve(1);
-                //promises[1] = Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]).then(result => { context = result });
-                //return Promise.all(promises);
                 return Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]);
             }).then(result => {
                 context = result;
@@ -362,6 +357,9 @@
             }).then(() => {
                 return Global.Node.relay(tx);
             }).then(result => {
+                $("#Tab_Account_Index .pay_value").val("");
+                $("#Tab_Account_Index .pay_address").val("");
+                Global.count = 0;
                 alert(Resources.global.txId + tx.hash.toString());
             }).catch(e => {
                 alert(e.message);

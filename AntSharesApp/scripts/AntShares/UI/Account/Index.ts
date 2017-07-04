@@ -37,10 +37,8 @@
                 return this.loadBalance(addr);
             }).then(() => {
                 let promises = new Array<PromiseLike<void>>();
-                let j = 0;
                 this.map.forEach(value => {
                     promises.push(this.addCoinList(value));
-                    j++;
                 });
                 return Promise.all(promises);
             }).then(() => {
@@ -117,34 +115,23 @@
                     alert(Resources.global.antshareIntegerOnly);
                     return;
                 }
-                let context: Core.SignatureContext;
-                let tx: Core.ContractTransaction;
+
+                let publicKey = Global.Wallet.getAccounts()[0].publicKey.encodePoint(false).toHexString();
                 Promise.resolve(1).then(() => {
                     return this.loadTx(this.address, dests, amounts, assetId);
                 }).then(() => {
-                    tx = Core.Transaction.deserializeFrom(this.strTx.hexToBytes().buffer);
-                    return Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]);
-                }).then(result => {
-                    context = result;
-                    return Global.Wallet.sign(context);
-                }).then(result => {
-                    if (!result) throw new Error(Resources.global.canNotSign);
-                    if (!context.isCompleted())
-                        throw new Error(Resources.global.thisVersion1);
-                    tx.scripts = context.getScripts();
-                    return tx.ensureHash();
-                }).then(() => {
-                    return Global.Node.relay(tx);
-                }).then(result => {
-                    $("#Tab_Account_Index .pay_value").val("");
-                    $("#Tab_Account_Index .pay_address").val("");
-                    Global.count = 0;
-                    alert(Resources.global.txId + tx.hash.toString());
-                }).catch(e => {
-                    alert(e.message);
+                    let tx = Core.Transaction.deserializeFrom(this.strTx.hexToBytes().buffer);
+                    return this.signInternal(tx, Global.Wallet.getAccounts()[0]);
+                }).then(signature => {
+                    let sig: string = new Uint8Array(signature).toHexString();
+                    Global.RestClient.postBroadcast(publicKey, sig, this.strTx).then(response => {
+                        let res: JSON = JSON.parse(response);
+                        if (res["result"] == true) {
+                            alert("交易成功， txid = " + res["txid"]);
+                        }
+                    });
                 });
             }
-            
         }
 
         private loadTx = (source: string, dests: string, amounts: string, assetId: string): JQueryPromise<any> => {
@@ -230,24 +217,19 @@
         }
 
 
-        private sign = (tx: string): PromiseLike<any> => {
-            let context: Core.SignatureContext;
-            return Core.SignatureContext.parse(tx).then(result => {
-                context = result;
-                return Global.Wallet.sign(result);
-            }).then(success => {
-                if (success) {
-                    return context.toString();
-                }
-                else {
-                    alert(Resources.global.signError1);
-                }
-                }).then(signedTx => {
-                    return signedTx;
-                }).catch(reason => {
-                alert(reason);
+        private signInternal(signable: Core.ISignable, account: AntShares.Wallets.Account): PromiseLike<ArrayBuffer> {
+            let pubkey = account.publicKey.encodePoint(false);
+            let d = new Uint8Array(account.privateKey).base64UrlEncode();
+            let x = pubkey.subarray(1, 33).base64UrlEncode();
+            let y = pubkey.subarray(33, 65).base64UrlEncode();
+            return window.crypto.subtle.importKey("jwk", <any>{ kty: "EC", crv: "P-256", d: d, x: x, y: y, ext: true }, { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]).then(result => {
+                let ms = new IO.MemoryStream();
+                let writer = new IO.BinaryWriter(ms);
+                signable.serializeUnsigned(writer);
+                return window.crypto.subtle.sign({ name: "ECDSA", hash: { name: "SHA-256" } }, result, <any>ms.toArray());
             });
         }
+
 
 
         private loadContactsList = (): PromiseLike<void> => {
