@@ -2,6 +2,8 @@
 {
     export class Sync
     {
+        public heightChanged = new __event(this);
+
         private static height = 0;
         private static callNode(node: string): PromiseLike<Map<boolean, string>> {
             let dictionary = new Map<boolean, string>();

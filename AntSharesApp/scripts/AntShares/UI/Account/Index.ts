@@ -6,6 +6,7 @@
         private address: string;
         private strTx: string;
         private assets: Map<Core.RegisterTransaction, Fixed8>;
+        private eventTest: EventHandler<any>;
 
         protected oncreate(): void
         {
@@ -21,6 +22,8 @@
             }
             setTitle(1);
             //this.circle();
+
+            SyncHeight.heightChanged.addEventListener(this.eventTest);
 
             $("#Tab_Account_Index #my_ans").text("0");
             $("#Tab_Account_Index #my_anc").text("0");
@@ -63,6 +66,10 @@
             }).catch(e => {
                 debugLog(e.message);
             });
+        }
+
+        private test = () => {
+            this.eventTest(this, "1");
         }
 
         private circle = () => {

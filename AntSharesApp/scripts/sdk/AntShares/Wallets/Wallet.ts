@@ -689,7 +689,7 @@
             });
         }
 
-        public sign(context: Core.SignatureContext): PromiseLike<boolean>
+        private sign(context: Core.SignatureContext): PromiseLike<boolean>
         {
             let promises = new Array<PromiseLike<{ contract: Contract, account: Account, signature: ArrayBuffer }>>();
             for (let i = 0; i < context.scriptHashes.length; i++)
