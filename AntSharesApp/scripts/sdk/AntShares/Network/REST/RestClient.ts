@@ -111,6 +111,33 @@
             });
         }
 
+
+        public getGas(addr: string): JQueryPromise<any> {
+            let url: string = this.rootURL + "/claim/" + addr;
+            debugLog(url);
+            return $.ajax({
+                type: "GET",
+                url: url,
+                timeout: 3 * 1000
+            });
+        }
+
+        public claimGas(pubKey: string): JQueryPromise<any> {
+            let url: string = this.rootURL + "/gas";
+            debugLog(url);
+            let params = [];
+            params.push("publicKey" + "=" + pubKey);
+            let dataToSend = params.join("&");
+            debugLog("dataToSend: "+dataToSend);
+            return $.ajax({
+                type: "POST",
+                data: dataToSend,
+                contentType: 'application/x-www-form-urlencoded',
+                url: url,
+                timeout: 3 * 1000
+            });
+        }
+
         //public static registerTx(accessToken: string, address: string, fileText: string): JQueryPromise<any>
         //{
         //    let url = RestMethod.restURL + RestMethod.commitTxURL;

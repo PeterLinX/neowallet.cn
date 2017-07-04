@@ -364,6 +364,21 @@
 
                 </div>
 
+                <div id="Tab_Account_Claim" class="tab-pane">
+                    <div class="blue-panel">
+                        <div class="ans-div"><span class="lang-available">可用GAS</span> <span id="my_available_gas">0</span></div>
+                        <div class="anc-div"><span class="lang-unavailable">不可用GAS</span> <span id="my_unavailable_gas">0</span></div>
+                    </div>
+                    <div id="Account_Claim" class="form-horizontal tab-pane">
+                        <form id="form_account_send" autocomplete="off">
+                            <div class="lang-max-to-claim">最大可提取<span class="asset-amount text-success">0</span></div>
+                            <button id="claim" class="btn btn-success lang-confirm-claim" type="submit" onclick="event.preventDefault()">确认提取</button>
+                        </form>
+                    </div>
+
+                </div>
+
+
                 <div id="Tab_Account_Receive" class="form-horizontal tab-pane">
                     <h3 class="page-header lang-receiver-address"></h3>
                     <div class="row">
@@ -385,43 +400,6 @@
                             <button id="btnQRcode" class="btn btn-primary" style="display:none" onclick="showQRcode()"></button><br><br>
                         </div>
                     </div>
-                </div>
-
-                <div id="Tab_Account_Send" class="form-horizontal tab-pane">
-                    <form id="form_account_send" autocomplete="off">
-                        <h3 class="page-header lang-asset-transfer"></h3>
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <h5 class="lang-select-asset"></h5>
-                                <select id="transfer_asset" name="transfer_asset" class="form-control" data-val="true"></select>
-                                <span class="text-danger" data-valmsg-for="transfer_asset" data-valmsg-replace="true"></span>
-                            </div>
-                        </div>
-                        <div class="lang-max-to-transfer"><span class="asset-amount text-success">0</span></div>
-                        <h5 class="lang-receiver"></h5>
-                        <div class="form-group">
-                            <div class="col-sm-9" style="margin-bottom:10px">
-                                <div class="input-group">
-                                    <input id="transfer_txout" name="transfer_txout" data-val="true" data-val-regex-pattern="A[F-HJ-NP-Za-f][1-9A-HJ-NP-Za-km-z]{32}" class="pay_address" type="text" />
-                                    <div class="input-group-btn">
-                                        <button type="button" class="btn btn-default dropdown-toggle lang-contact-btn" data-toggle="dropdown"><span class="caret"></span></button>
-                                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                            <li class="row" style="display:none">
-                                                <div class="col-xs-4 contact-name">点位符：联系人名称</div>
-                                                <div class="col-xs-8 contact-address">点位符：AQVh2pG732YvtNaxEGkQUei3YA4cvo7d2i</div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <span class="text-danger" data-valmsg-for="transfer_txout" data-valmsg-replace="true"></span>
-                            </div>
-                            <div class="col-sm-3" style="margin-bottom:10px">
-                                <input id="transfer_value" name="transfer_value" data-val="true" class="pay_value" data-val-regex-pattern="\d+(\.\d+)?" type="text" />
-                                <span class="text-danger" data-valmsg-for="transfer_value" data-valmsg-replace="true"></span>
-                            </div>
-                        </div>
-                        <button class="btn btn-success lang-confirm-transfer" type="submit" onclick="event.preventDefault()"></button>
-                    </form>
                 </div>
 
                 <div id="Tab_Contacts_Index" class="form-horizontal tab-pane">
@@ -690,8 +668,11 @@
                     <li class="short-hidden withripple">
                         <a class="fist-menu tab-trigger lang-receive" href="#Tab_Account_Receive"><i class="iconfont">&#xe6ab;</i></a>
                     </li>
-                    <li class="short-hidden withripple">
+                    <!--<li class="short-hidden withripple">
                         <a class="fist-menu tab-trigger lang-send" href="#Tab_Account_Send"><i class="iconfont">&#xe610;</i></a>
+                    </li>-->
+                    <li class="short-hidden withripple">
+                        <a class="fist-menu tab-trigger lang-claim" href="#Tab_Account_Claim"><i class="iconfont">&#xe610;</i></a>
                     </li>
                     <li class="withripple">
                         <a class="fist-menu tab-trigger lang-contacts" href="#Tab_Contacts_Index"><i class="iconfont">&#xe635;</i></a>

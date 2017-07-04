@@ -6,7 +6,6 @@
         private address: string;
         private strTx: string;
         private assets: Map<Core.RegisterTransaction, Fixed8>;
-        private count: number;
 
         protected oncreate(): void
         {
@@ -15,16 +14,13 @@
         }
 
         protected onload(): void {
-            this.count = 0;
+            Global.count = 0;
             if (Global.Wallet == null) {
                 TabBase.showTab("#Tab_Wallet_Open");
                 return;
             }
             setTitle(1);
             //this.circle();
-            //this.timer();
-
-            //this.syncHeight(Global.height);
 
             $("#Tab_Account_Index #my_ans").text("0");
             $("#Tab_Account_Index #my_anc").text("0");
@@ -40,7 +36,6 @@
                 this.address = addr;
                 return this.loadBalance(addr);
             }).then(() => {
-                //return this.map.forEach(this.addCoinList);
                 let promises = new Array<PromiseLike<void>>();
                 let j = 0;
                 this.map.forEach(value => {
@@ -70,40 +65,6 @@
             }).catch(e => {
                 debugLog(e.message);
             });
-        }
-
-        private timer = () => {
-            setTimeout(() => {
-                if (this.count == 21) {
-                    TabBase.showTab("#Tab_Account_Index");
-                }
-                $("#countTimer").text(this.count);
-                this.count++;
-                this.timer();
-            }, 1000);
-        }
-
-        private syncHeight = (height: number): JQueryPromise<any>  => {
-            if (height == 0) {
-                return Global.RestClient.getHeight().then(response => {
-                    let height: JSON = JSON.parse(response);
-                    Global.height = height["height"];
-                    return this.syncHeight(Global.height);
-                });
-            }
-            else {
-                return Global.RestClient.getHeight().then(response => {
-                    let height: JSON = JSON.parse(response);
-                    debugLog(Global.height);
-                    if (height["height"] - Global.height >= 1) {
-                        Global.height = height["height"];
-                        TabBase.showTab("#Tab_Account_Index");
-                    } else {
-                        return this.syncHeight(Global.height);
-                    }
-                });
-            }
-            
         }
 
         private circle = () => {
@@ -177,6 +138,7 @@
                 }).then(result => {
                     $("#Tab_Account_Index .pay_value").val("");
                     $("#Tab_Account_Index .pay_address").val("");
+                    Global.count = 0;
                     alert(Resources.global.txId + tx.hash.toString());
                 }).catch(e => {
                     alert(e.message);
@@ -190,6 +152,7 @@
                 let res: JSON = JSON.parse(response);
                 if (res["result"] == true) {
                     this.strTx = res["transaction"];
+                    debugLog(res["transaction"]);
                 }
             });
         }
