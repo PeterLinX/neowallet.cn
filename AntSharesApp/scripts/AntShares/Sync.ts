@@ -2,7 +2,6 @@
 {
     export class Sync
     {
-        private static height = 0;
         private static callNode(node: string): PromiseLike<Map<boolean, string>> {
             let dictionary = new Map<boolean, string>();
             let rpcClient = new AntShares.Network.RPC.RpcClient(node);
@@ -66,21 +65,21 @@
                 }).then(success => {
                 return Global.Blockchain.getBlockCount();
             }).then(result => {
-                let remoteHeight = result - 1;
-                $(".remote_height").text(remoteHeight);
-                if (Global.Wallet) {
-                    let localHeight = (Global.Wallet as any).walletHeight - 1;
-                    let process = (localHeight / remoteHeight * 100).toFixed(1);
-                    $(".progress-bar").css("width", process + "%");
-                    $(".progress-bar").attr("aria-valuenow", process + "%");
-                    $(".local_process").text(process);
-                    $(".local_height").text(localHeight);
-                }
+                //let remoteHeight = result - 1;
+                //$(".remote_height").text(remoteHeight);
+                //if (Global.Wallet) {
+                //    let localHeight = (Global.Wallet as any).walletHeight - 1;
+                //    let process = (localHeight / remoteHeight * 100).toFixed(1);
+                //    $(".progress-bar").css("width", process + "%");
+                //    $(".progress-bar").attr("aria-valuenow", process + "%");
+                //    $(".local_process").text(process);
+                //    $(".local_height").text(localHeight);
+                //}
             }).then(() => {
-                //return delay(AntShares.Core.Blockchain.SecondsPerBlock * 1000).then(() => {
-                //    return AntShares.Sync.connectNode(Global.isMainNet);
-                //});
-                AntShares.Sync.connectNode(Global.isMainNet);
+                return delay(AntShares.Core.Blockchain.SecondsPerBlock * 1000).then(() => {
+                    return AntShares.Sync.connectNode(Global.isMainNet);
+                });
+                //AntShares.Sync.connectNode(Global.isMainNet);
             }).catch(error => {
                 debugLog("网络连接中断");
                 return delay(Global.reConnectMultiplier * 1000).then(() => {
@@ -129,8 +128,8 @@
         }
 
     }
-    //AntShares.SyncHeight.processHeight();
-    //AntShares.Sync.connectNode(Global.isMainNet);
+    AntShares.Sync.connectNode(Global.isMainNet);
     AntShares.Sync.timer();
+    //AntShares.SyncHeight.processHeight();
     //AntShares.Sync.syncHeight();
 }

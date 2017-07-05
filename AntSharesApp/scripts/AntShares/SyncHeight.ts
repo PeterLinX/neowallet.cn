@@ -7,7 +7,6 @@
             Promise.resolve(1).then(() => {
                 return this.getNewHeight();
             }).then(() => {
-                if (this.height > 0) Global.isConnected = true;
                 let localHeight = Global.height;
                 let remoteHeight = this.height;
                 $(".remote_height").text(remoteHeight);

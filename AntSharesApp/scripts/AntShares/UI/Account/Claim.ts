@@ -7,6 +7,8 @@
 
         protected oncreate(): void {
             $("#Tab_Account_Claim #claim").click(this.OnClaimButtonClick);
+            SyncHeight.heightChanged.addEventListener(this.refreshGasEvent);
+
         }
 
         protected onload(): void {
@@ -16,15 +18,12 @@
             }
             setTitle(1);
 
-            SyncHeight.heightChanged.addEventListener(this.refreshGasEvent);
-
             this.loadAddr().then(addr => {
                 return this.refreshGas(addr);
             });
         }
 
         private refreshGasEvent = (sender: Object) => {
-            debugLog("houhou");
             this.refreshGas(this.address);
         }
 
@@ -35,6 +34,8 @@
             }).then(() => {
                 $("#Tab_Account_Claim #my_available_gas").text(this.availableGas);
                 $("#Tab_Account_Claim #my_unavailable_gas").text(this.unAvailableGas);
+                $("#Tab_Account_Claim .asset-amount").text(this.availableGas);
+
             }).catch(e => {
                 debugLog(e.message);
             });

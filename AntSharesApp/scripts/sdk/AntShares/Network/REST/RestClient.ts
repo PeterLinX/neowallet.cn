@@ -36,7 +36,6 @@
 
         public getHeight(): JQueryPromise<any> {
             let url = this.rootURL + "/height";
-            debugLog(url);
             return $.ajax({
                 type: "GET",
                 url: url,
@@ -46,7 +45,6 @@
 
         public getBlock(height: number): JQueryPromise<any> {
             let url: string = this.rootURL + "/block/"+height;
-            debugLog(url);
             return $.ajax({
                 type: "GET",
                 url: url,
@@ -56,7 +54,6 @@
 
         public getTx(txid: string): JQueryPromise<any> {
             let url: string = this.rootURL + "/transaction/" + txid;
-            debugLog(url);
             return $.ajax({
                 type: "GET",
                 url: url,
@@ -66,7 +63,6 @@
 
         public getAddr(addr: string): JQueryPromise<any> {
             let url: string = this.rootURL + "/address/" + addr;
-            debugLog(url);
             return $.ajax({
                 type: "GET",
                 url: url,
@@ -114,7 +110,6 @@
 
         public getGas(addr: string): JQueryPromise<any> {
             let url: string = this.rootURL + "/claim/" + addr;
-            debugLog(url);
             return $.ajax({
                 type: "GET",
                 url: url,
@@ -124,7 +119,6 @@
 
         public claimGas(pubKey: string): JQueryPromise<any> {
             let url: string = this.rootURL + "/gas";
-            debugLog(url);
             let params = [];
             params.push("publicKey" + "=" + pubKey);
             let dataToSend = params.join("&");
