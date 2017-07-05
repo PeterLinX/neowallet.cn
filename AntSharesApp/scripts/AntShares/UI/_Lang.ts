@@ -192,7 +192,7 @@
         static publicInputTplPlaceholder = "public key";
         static publickeyitemPlaceholder = "public key";
         static addPublicTitle = "add key";
-        static transferTxoutPlaceholder = "Other Neo address";
+        static transferTxoutPlaceholder = "Neo address";
         static transferValuePlaceholder = "value";
         static inputDataPlaceholder = "Ready to sign Tx";
         static inputAssetNamePlaceholder = "Enter the asset's name";

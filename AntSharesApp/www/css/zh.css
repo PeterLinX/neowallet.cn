@@ -165,3 +165,7 @@
 .lang-check-privatekey::after { content: '查看私钥'}
 .lang-claim::after { content: '提取'}
 .lang-asset-claim::after { content: '提取Gas' }
+.lang-max-to-claim::before {    content: '最大可提取'}
+.lang-confirm-claim::after {    content: '确认提取'}
+.lang-available-gas::after {    content: '可提取Gas'}
+.lang-unavailable-gas::after {    content: '不可提取Gas'}

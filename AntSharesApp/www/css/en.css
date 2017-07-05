@@ -44,7 +44,7 @@
 .lang-issuer::before { content:'issuer' }
 .lang-asset-transfer::after { content:'Transfer' }
 .lang-select-asset::before { content:'select asset' }
-.lang-max-to-transfer::before { content:'the maximum transfer' }
+.lang-max-to-transfer::before { content:'maximum' }
 .lang-receiver::before { content:'receiver' }
 .lang-confirm-transfer::before { content:'confirm transfer' }
 .lang-my-tx-list::before { content:'Recently Transaction' }
@@ -168,3 +168,7 @@
 .lang-check-privatekey::after { content: 'Check your private key'}
 .lang-claim::after {content: 'Claim'}
 .lang-asset-claim::after { content: 'Claim Gas' }
+.lang-max-to-claim::before { content: 'maximum' }
+.lang-confirm-claim::after {    content: 'Claim'}
+.lang-available-gas::after {    content: 'Available Gas'}
+.lang-unavailable-gas::after {    content: 'Unavailable Gas'}
