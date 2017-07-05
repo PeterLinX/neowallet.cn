@@ -6,7 +6,6 @@
         private address: string;
         private strTx: string;
         private assets: Map<Core.RegisterTransaction, Fixed8>;
-        private eventTest: EventHandler<any>;
 
         protected oncreate(): void
         {
@@ -15,7 +14,6 @@
         }
 
         protected onload(): void {
-            Global.count = 0;
             if (Global.Wallet == null) {
                 TabBase.showTab("#Tab_Wallet_Open");
                 return;
@@ -23,19 +21,28 @@
             setTitle(1);
             //this.circle();
 
-            SyncHeight.heightChanged.addEventListener(this.eventTest);
-
             $("#Tab_Account_Index #my_ans").text("0");
             $("#Tab_Account_Index #my_anc").text("0");
             $("#Tab_Account_Index .pay_value").val("");
             $("#Tab_Account_Index .pay_address").val("");
-
-            let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
-            asset_ul.find(".add").remove();
-
+            $("#Tab_Account_Index .dropdown-menu").find("li.add").remove();
             this.map = new Map<string, { assetId: Uint256, amount: Fixed8 }>();
             this.assets = new Map<Core.RegisterTransaction, Fixed8>();
+
             this.loadAddr().then(addr => {
+                return this.refreshBalance(addr);
+            }).then(() => {
+                SyncHeight.heightChanged.addEventListener(this.refreshBalanceEvent);
+                return this.loadContactsList();
+            }).catch(e => {
+                debugLog(e.message);
+            });
+        }
+
+        private refreshBalance = (addr: string): PromiseLike<void> => {
+            return Promise.resolve(addr).then(addr => {
+                let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
+                asset_ul.find(".add").remove();
                 this.address = addr;
                 return this.loadBalance(addr);
             }).then(() => {
@@ -60,16 +67,14 @@
                     select.append(option);
                 });
                 select.change();
-            }).then(() => {
-                $("#Tab_Account_Index .dropdown-menu").find("li.add").remove();
-                return this.loadContactsList();
             }).catch(e => {
                 debugLog(e.message);
             });
         }
 
-        private test = () => {
-            this.eventTest(this, "1");
+        private refreshBalanceEvent = (sender: Object) => {
+            debugLog("hiahia");
+            this.refreshBalance(this.address);
         }
 
         private circle = () => {
@@ -137,6 +142,11 @@
                             alert("交易成功， txid = " + res["txid"]);
                         }
                     });
+                }).then(() => {
+                    $("#Tab_Account_Index .pay_value").val("");
+                    $("#Tab_Account_Index .pay_address").val("");
+                }).catch(e => {
+                    debugLog(e.message);
                 });
             }
         }
@@ -172,21 +182,44 @@
             }
         }
 
-        private addCoinList = (item: { assetId: Uint256, amount: Fixed8 }): PromiseLike<void> =>
-        {
+        //private addCoinList = (item: { assetId: Uint256, amount: Fixed8 }): PromiseLike<void> =>
+        //{
+        //    let ul = $("#Tab_Account_Index").find("ul:eq(0)");
+        //    let liTemplet = ul.find("li:eq(0)");
+        //    let li = liTemplet.clone(true);
+        //    li.removeAttr("style");
+        //    return Core.Blockchain.Default.getTransaction(item.assetId).then(result =>
+        //    {
+        //        let asset = <Core.RegisterTransaction>result;
+        //        this.assets.set(asset, item.amount);
+        //        if (asset.assetType == AntShares.Core.AssetType.AntShare) {
+        //            $("#my_ans").text(convert(item.amount.toString()))
+        //        }
+        //        else if (asset.assetType == AntShares.Core.AssetType.AntCoin)
+        //        {
+        //            $("#my_anc").text(convert(item.amount.toString()))
+        //        } else {
+        //            li.find(".asset_value").text(convert(item.amount.toString()));
+        //            li.find(".asset_issuer").text(asset.issuer.toString());
+        //            li.find(".asset_name").text(asset.getName());
+        //            li.addClass("add");
+        //            ul.append(li);
+        //        }
+        //    });
+        //}
+
+        private addCoinList = (item: { assetId: Uint256, amount: Fixed8 }): PromiseLike<void> => {
             let ul = $("#Tab_Account_Index").find("ul:eq(0)");
             let liTemplet = ul.find("li:eq(0)");
             let li = liTemplet.clone(true);
             li.removeAttr("style");
-            return Core.Blockchain.Default.getTransaction(item.assetId).then(result =>
-            {
+            return Core.Blockchain.Default.getTransaction(item.assetId).then(result => {
                 let asset = <Core.RegisterTransaction>result;
                 this.assets.set(asset, item.amount);
                 if (asset.assetType == AntShares.Core.AssetType.AntShare) {
                     $("#my_ans").text(convert(item.amount.toString()))
                 }
-                else if (asset.assetType == AntShares.Core.AssetType.AntCoin)
-                {
+                else if (asset.assetType == AntShares.Core.AssetType.AntCoin) {
                     $("#my_anc").text(convert(item.amount.toString()))
                 } else {
                     li.find(".asset_value").text(convert(item.amount.toString()));

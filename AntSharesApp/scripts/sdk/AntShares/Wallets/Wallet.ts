@@ -358,6 +358,8 @@
             {
                 passwordKeyHash = new Uint8Array(results[0]);
                 aesKey = results[1];
+                let sync = new SyncHeight();
+                sync.processHeight();
                 if (create)
                 {
                     this.iv = new Uint8Array(16);
@@ -689,7 +691,7 @@
             });
         }
 
-        private sign(context: Core.SignatureContext): PromiseLike<boolean>
+        public sign(context: Core.SignatureContext): PromiseLike<boolean>
         {
             let promises = new Array<PromiseLike<{ contract: Contract, account: Account, signature: ArrayBuffer }>>();
             for (let i = 0; i < context.scriptHashes.length; i++)

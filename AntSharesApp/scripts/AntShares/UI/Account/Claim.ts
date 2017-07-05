@@ -3,6 +3,7 @@
         private availableGas: string;
         private unAvailableGas: string;
         private strTx: string;
+        private address: string;
 
         protected oncreate(): void {
             $("#Tab_Account_Claim #claim").click(this.OnClaimButtonClick);
@@ -15,13 +16,30 @@
             }
             setTitle(1);
 
+            SyncHeight.heightChanged.addEventListener(this.refreshGasEvent);
+
             this.loadAddr().then(addr => {
+                return this.refreshGas(addr);
+            });
+        }
+
+        private refreshGasEvent = (sender: Object) => {
+            debugLog("houhou");
+            this.refreshGas(this.address);
+        }
+
+        private refreshGas = (addr: string): PromiseLike<void> => {
+            return Promise.resolve(addr).then(addr => {
+                this.address = addr;
                 return this.loadGas(addr);
             }).then(() => {
                 $("#Tab_Account_Claim #my_available_gas").text(this.availableGas);
                 $("#Tab_Account_Claim #my_unavailable_gas").text(this.unAvailableGas);
+            }).catch(e => {
+                debugLog(e.message);
             });
         }
+
 
         private OnClaimButtonClick = () => {
             let publicKey = Global.Wallet.getAccounts()[0].publicKey.encodePoint(false).toHexString();
@@ -66,17 +84,18 @@
 
         private loadAddr = (): PromiseLike<string> => {
             return Global.Wallet.getContracts()[0].getAddress().then(addr => {
+                this.address = addr;
                 return addr;
             });
         }
 
 
         private loadGas = (addr: string): JQueryPromise<any> => {
-            //{"claims": [], "enable": "0", "disable": "0.00001112"}
+            //{"available": "0", "claims": [], "unavailable": "0"}
             return Global.RestClient.getGas(addr).then(response => {
                 let gas: JSON = JSON.parse(response);
-                this.availableGas = gas["enable"];
-                this.unAvailableGas = gas["disable"];
+                this.availableGas = gas["available"];
+                this.unAvailableGas = gas["unavailable"];
                 
             });
         }

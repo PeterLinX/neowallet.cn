@@ -7,19 +7,27 @@
             Promise.resolve(1).then(() => {
                 return this.getNewHeight();
             }).then(() => {
-                debugLog("height: " + this.height);
-                debugLog("GlobalHeight: " + Global.height);
+                if (this.height > 0) Global.isConnected = true;
+                let localHeight = Global.height;
+                let remoteHeight = this.height;
+                $(".remote_height").text(remoteHeight);
+                let process = (localHeight / remoteHeight * 100).toFixed(1);
+                $(".progress-bar").css("width", process + "%");
+                $(".progress-bar").attr("aria-valuenow", process + "%");
+                $(".local_process").text(process);
+                $(".local_height").text(localHeight);
+            }).then(() => {
                 if (this.height - Global.height >= 1) {
-                    debugLog("biu");
+                    debugLog("biu~");
                     Global.count = 0;
                     Global.height = this.height;
                     SyncHeight.heightChanged.dispatchEvent(null);
-                    setTimeout(this.processHeight.bind(this), Global.reConnectMultiplier * 1000);
+                    setTimeout(this.processHeight.bind(SyncHeight), Global.reConnectMultiplier * 1000);
                 } else {
-                    setTimeout(this.processHeight.bind(this), 5000);
+                    setTimeout(this.processHeight.bind(SyncHeight), 5000);
                 }
             }).catch(error => {
-                setTimeout(this.processHeight.bind(this), Global.reConnectMultiplier * 1000);
+                setTimeout(this.processHeight.bind(SyncHeight), Global.reConnectMultiplier * 1000);
             });
         }
 
@@ -29,6 +37,8 @@
                 this.height = height["height"];
             });
         }
+
+
     }
 
 }

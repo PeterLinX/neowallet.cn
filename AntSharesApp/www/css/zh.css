@@ -164,3 +164,4 @@
 .lang-system-setup::after { content: '系统设置' }
 .lang-check-privatekey::after { content: '查看私钥'}
 .lang-claim::after { content: '提取'}
+.lang-asset-claim::after { content: '提取Gas' }

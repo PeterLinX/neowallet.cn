@@ -167,3 +167,4 @@
 .lang-system-setup::after { content: 'System setup' }
 .lang-check-privatekey::after { content: 'Check your private key'}
 .lang-claim::after {content: 'Claim'}
+.lang-asset-claim::after { content: 'Claim Gas' }
