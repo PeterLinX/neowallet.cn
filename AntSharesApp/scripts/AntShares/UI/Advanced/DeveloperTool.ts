@@ -179,7 +179,7 @@
             //url: http://api.otcgo.cn/mainnet/address/AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos
             //{"utxo": {"602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": [{"prevIndex": 0, "prevHash": "25d337deae8730d9a627310d8b386e5c2323f9ca7ffe1a0096d5edddd2909172", "value": "0.08463024"}, {"prevIndex": 0, "prevHash": "4268b477e2d1631a1d6e3df535612fed06dfbc2d77c2a6cc5ff4cbc55f292b5a", "value": "0.0965472"}, {"prevIndex": 0, "prevHash": "26e96f2a3cea657c0fe622d07298dd39afd097f4da19d943b23a6533ecd380d5", "value": "0.1379856"}], "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b": [{"prevIndex": 0, "prevHash": "482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c", "value": "534"}]}, "_id": "AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos", "balances": {"602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": "0.31916304", "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b": "534"}}
             debugLog(4);
-            let addr = "APBvNT5JHLsGFofDUExEvmAC3hGrnWYA6x";
+            let addr = "AczMTp9o2rwuPTkrqfZE1PkiMDUiULMtdR";
             Global.RestClient.getAddr(addr).then(response => {
                 let addr: JSON = JSON.parse(response);
                 debugLog(addr["utxo"]);
@@ -187,7 +187,8 @@
                 let balances = addr["balances"];
                 let assetItems = new Array<{ assetId: string, amount: string }>();
                 for (var key in balances) {
-                    assetItems.push({ assetId: key, amount: balances[key] });
+                    
+                    assetItems.push({ assetId: key, amount: scientificToNumber(balances[key]) });
                 }
                 debugLog(assetItems);
 

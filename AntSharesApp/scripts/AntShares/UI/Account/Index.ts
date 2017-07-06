@@ -60,7 +60,6 @@
                     $("#Tab_Account_Index .asset-amount").text(amount ? amount : 0);
                 });
                 this.assets.forEach((value, key, map) => {
-                    debugLog("assets");
                     let option = document.createElement("option");
                     option.text = key.getName();
                     option.value = key.hash.toString();
@@ -107,7 +106,7 @@
                 let addr: JSON = JSON.parse(response);
                 let balances = addr["balances"];
                 for (var key in balances) {
-                    this.map.set(key, { assetId: Uint256.parse(key), amount: Fixed8.parse(balances[key]) });
+                    this.map.set(key, { assetId: Uint256.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) });
                 }
             });
         }

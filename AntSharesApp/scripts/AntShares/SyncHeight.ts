@@ -17,7 +17,7 @@
                 $(".local_height").text(localHeight);
             }).then(() => {
                 if (this.height - Global.height >= 1) {
-                    debugLog("biu~");
+                    debugLog("biu");
                     Global.count = 0;
                     Global.height = this.height;
                     SyncHeight.heightChanged.dispatchEvent(null);

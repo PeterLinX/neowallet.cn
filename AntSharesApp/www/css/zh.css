@@ -164,7 +164,7 @@
 .lang-system-setup::after { content: '系统设置' }
 .lang-check-privatekey::after { content: '查看私钥'}
 .lang-claim::after { content: '提取'}
-.lang-asset-claim::after { content: '提取Gas' }
+.lang-asset-claim::after { content: '提取' }
 .lang-max-to-claim::before {    content: '最大可提取'}
 .lang-confirm-claim::after {    content: '确认提取'}
 .lang-available-gas::after {    content: '可提取Gas'}

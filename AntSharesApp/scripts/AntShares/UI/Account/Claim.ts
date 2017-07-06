@@ -34,7 +34,7 @@
             }).then(() => {
                 $("#Tab_Account_Claim #my_available_gas").text(this.availableGas);
                 $("#Tab_Account_Claim #my_unavailable_gas").text(this.unAvailableGas);
-                $("#Tab_Account_Claim .asset-amount").text(this.availableGas);
+                $("#Tab_Account_Claim .gas-amount").text(this.availableGas);
 
             }).catch(e => {
                 debugLog(e.message);
@@ -95,8 +95,8 @@
             //{"available": "0", "claims": [], "unavailable": "0"}
             return Global.RestClient.getGas(addr).then(response => {
                 let gas: JSON = JSON.parse(response);
-                this.availableGas = gas["available"];
-                this.unAvailableGas = gas["unavailable"];
+                this.availableGas = scientificToNumber(gas["available"]);
+                this.unAvailableGas = scientificToNumber(gas["unavailable"]);
                 
             });
         }
