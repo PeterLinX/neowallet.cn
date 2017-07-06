@@ -78,8 +78,6 @@
             params.push("amounts" + "=" + amounts);
             params.push("assetId" + "=" + assetId);
             let dataToSend = params.join("&");
-            debugLog(url);
-            debugLog(dataToSend);
             return $.ajax({
                 type: "POST",
                 data: dataToSend,

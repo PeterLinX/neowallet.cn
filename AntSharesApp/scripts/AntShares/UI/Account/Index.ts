@@ -49,7 +49,6 @@
 
         private refreshBalance = (addr: string): PromiseLike<void> => {
             return Promise.resolve(addr).then(addr => {
-                debugLog("refresh");
                 this.map.clear();
                 this.assets.clear();
                 this.address = addr;

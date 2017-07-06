@@ -299,9 +299,11 @@ function debugLog(p: any) {
 
 function scientificToNumber(num): string {
     var str = num.toString();
-    var reg = /^(\d+)(E)([\-]?\d+)$/;
-    var arr, len,
-        zero = '';
+    var reg = /^(\d+)(\.\d+)?(E)([\-]?\d+)$/;
+    let arr, len;
+    let part = '';
+    let zero = '';
+    let result = '';
 
     /*6e7或6e+7 都会自动转换数值*/
     if (!reg.test(str)) {
@@ -309,11 +311,14 @@ function scientificToNumber(num): string {
     } else {
         /*6e-7 需要手动转换*/
         arr = reg.exec(str);
-        len = Math.abs(arr[3]) - 1;
+        len = Math.abs(arr[4]) - 1;
         for (var i = 0; i < len; i++) {
             zero += '0';
         }
-
-        return '0.' + zero + arr[1];
+        if (arr[2] != undefined) {
+            part = arr[2].replace(/./, '');
+        }
+        result = arr[1] + part;
     }
+    return '0.' + zero + result;
 }

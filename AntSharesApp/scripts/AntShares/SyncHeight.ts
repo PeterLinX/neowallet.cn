@@ -7,7 +7,12 @@
             Promise.resolve(1).then(() => {
                 return this.getNewHeight();
             }).then(() => {
-                let localHeight = Global.height;
+                let localHeight: number;
+                if (Global.height == 0) {
+                    localHeight = this.height;
+                } else {
+                    localHeight = Global.height;
+                }
                 let remoteHeight = this.height;
                 $(".remote_height").text(remoteHeight);
                 let process = (localHeight / remoteHeight * 100).toFixed(1);
@@ -17,7 +22,7 @@
                 $(".local_height").text(localHeight);
             }).then(() => {
                 if (this.height - Global.height >= 1) {
-                    debugLog("biu");
+                    debugLog("Sync");
                     Global.count = 0;
                     Global.height = this.height;
                     SyncHeight.heightChanged.dispatchEvent(null);

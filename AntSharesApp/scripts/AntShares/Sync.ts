@@ -15,7 +15,7 @@
         }
 
         public static connectNode(isMainNet: boolean): void {
-            debugLog("启动连接");
+            debugLog("Connect");
             Promise.resolve(1).then(() => {
                 let promises = [];
                 let nodeList: string[] = new Array<string>();
