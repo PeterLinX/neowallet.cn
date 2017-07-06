@@ -6,6 +6,7 @@
         private assets: Map<Core.RegisterTransaction, Fixed8>;
         private address: string;
         private strTx: string;
+        private assetSelected = 0;
 
         protected oncreate(): void
         {
@@ -30,6 +31,13 @@
             this.map = new Map<string, { assetId: Uint256, amount: Fixed8 }>();
             this.assets = new Map<Core.RegisterTransaction, Fixed8>();
 
+            let select = $("#Tab_Account_Index select");
+            select.change(() => {
+                let amount = $("#Tab_Account_Index #transfer_asset").find("option:selected").data("amount");
+                $("#Tab_Account_Index .asset-amount").text(amount ? amount : 0);
+                this.assetSelected = $("#Tab_Account_Index #transfer_asset").find("option:selected").val();
+            });
+
             this.loadAddr().then(addr => {
                 return this.refreshBalance(addr);
             }).then(() => {
@@ -41,6 +49,7 @@
 
         private refreshBalance = (addr: string): PromiseLike<void> => {
             return Promise.resolve(addr).then(addr => {
+                debugLog("refresh");
                 this.map.clear();
                 this.assets.clear();
                 this.address = addr;
@@ -55,10 +64,6 @@
                 let select = $("#Tab_Account_Index select");
                 select.html("");
                 select.append("<option value=0>" + Resources.global.pleaseChoose + "</option>");
-                select.change(() => {
-                    let amount = $("#Tab_Account_Index #transfer_asset").find("option:selected").data("amount");
-                    $("#Tab_Account_Index .asset-amount").text(amount ? amount : 0);
-                });
                 this.assets.forEach((value, key, map) => {
                     let option = document.createElement("option");
                     option.text = key.getName();
@@ -66,6 +71,7 @@
                     option.dataset["amount"] = value.toString();
                     select.append(option);
                 });
+                select.val(this.assetSelected);
                 select.change();
             }).catch(e => {
                 debugLog(e.message);

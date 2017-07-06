@@ -96,8 +96,6 @@
             params.push("signature" + "=" + signature);
             params.push("transaction" + "=" + tx);
             let dataToSend = params.join("&");
-            debugLog(url);
-            debugLog(dataToSend);
             return $.ajax({
                 type: "POST",
                 data: dataToSend,

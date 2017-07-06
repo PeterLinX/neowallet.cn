@@ -297,7 +297,7 @@ function debugLog(p: any) {
     $("#debugLog").prepend(p + "|" + new Date().toLocaleString()+ "</br>");
 }
 
-function scientificToNumber(num) {
+function scientificToNumber(num): string {
     var str = num.toString();
     var reg = /^(\d+)(E)([\-]?\d+)$/;
     var arr, len,
