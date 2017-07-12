@@ -15,7 +15,7 @@
             SyncHeight.heightChanged.addEventListener(this.refreshBalanceEvent);
         }
 
-        protected onload(): void {
+        protected onload(args: any[]): void {
             if (Global.Wallet == null) {
                 TabBase.showTab("#Tab_Wallet_Open");
                 return;
@@ -23,10 +23,15 @@
             setTitle(1);
             //this.circle();
 
+            if (args[0]) {
+                $("#Tab_Account_Index .pay_address").val(args[0]);
+            } else {
+                $("#Tab_Account_Index .pay_address").val("");
+            }
             $("#Tab_Account_Index #my_ans").text("0");
             $("#Tab_Account_Index #my_anc").text("0");
             $("#Tab_Account_Index .pay_value").val("");
-            $("#Tab_Account_Index .pay_address").val("");
+            
             $("#Tab_Account_Index .dropdown-menu").find("li.add").remove();
             this.map = new Map<string, { assetId: Uint256, amount: Fixed8 }>();
             this.assets = new Map<Core.RegisterTransaction, Fixed8>();
