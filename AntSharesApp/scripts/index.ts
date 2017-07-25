@@ -70,15 +70,16 @@ module AntSharesApp {
         } else if (is_weixin() || is_weibo() || is_qq()) {
             alert(AntShares.UI.Resources.global.browserError);
             return;
-        } else if (w.mobilecheck() && !isMobileApp.App()) {
-            if (isMobileWeb.Edge())
-                $("#download_link").attr("href", "https://www.microsoft.com/store/apps/9nblggh42jbd");
-            else if (isMobileWeb.Android())
-                $("#download_link").attr("href", "https://www.antshares.org/Client/android-release.apk");
-            else if (isMobileWeb.iOS())
-                $("#download_link").attr("href", "https://itunes.apple.com/app/xiao-yi/id1164555453");
-            ($('#downloadAPP') as any).modal();
-            return;
         }
+        //else if (w.mobilecheck() && !isMobileApp.App()) {
+        //    if (isMobileWeb.Edge())
+        //        $("#download_link").attr("href", "https://www.microsoft.com/store/apps/9nblggh42jbd");
+        //    else if (isMobileWeb.Android())
+        //        $("#download_link").attr("href", "https://www.antshares.org/Client/android-release.apk");
+        //    else if (isMobileWeb.iOS())
+        //        $("#download_link").attr("href", "https://itunes.apple.com/app/xiao-yi/id1164555453");
+        //    ($('#downloadAPP') as any).modal();
+        //    return;
+        //}
     }
 }

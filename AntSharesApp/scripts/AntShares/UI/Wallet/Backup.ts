@@ -56,7 +56,7 @@
                     let blob = new Blob(db, { "type": "application/octet-binary" });
                     if (navigator.msSaveBlob) {
                         try {
-                            navigator.msSaveBlob(blob, "antshares_backup");
+                            navigator.msSaveBlob(blob, "neo_backup");
                         }
                         catch (e) {
                             alert("msSaveBlob failed: " + e.message + "\r\n" + e.stack);
