@@ -277,7 +277,7 @@
                         li.addClass("add");
                         li.find(".contact-name").text(results[i].name);
                         li.find(".contact-address").text(results[i].address);
-                        li.attr("onclick", "$('#transfer_txout').val('" + results[i].address + "')");
+                        li.attr("onclick", "$('.pay_address').val('" + results[i].address + "')");
                         ul.append(li);
                     }
                 }
