@@ -198,3 +198,4 @@ FakesAssemblies/
 AntSharesApp/scripts/AntShares/UI/Test.ts
 build.json
 simulation
+/AntSharesApp/res/native/android/my-release-key.keystore
