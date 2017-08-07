@@ -43,7 +43,7 @@
 
 
         private OnClaimButtonClick = () => {
-            let publicKey = Global.Wallet.getAccounts()[0].publicKey.encodePoint(false).toHexString();
+            let publicKey = Global.Wallet.getAccounts()[0].publicKey.encodePoint(true).toHexString();
             Promise.resolve(1).then(() => {
                 return this.loadTx(publicKey);
             }).then(() => {
