@@ -69,8 +69,28 @@
                 select.html("");
                 select.append("<option value=0>" + Resources.global.pleaseChoose + "</option>");
                 this.assets.forEach((value, key, map) => {
+                    let assetName: string;
+                    let _assetName: string = key.getName();
+                    switch (_assetName) {
+                        case "小蚁股":
+                            assetName = "Neo";
+                            break;
+                        case "AntShare":
+                            assetName = "Neo";
+                            break;
+                        case "小蚁币":
+                            assetName = "NeoGas";
+                            break;
+                        case "AntCoin":
+                            assetName = "NeoGas";
+                            break;
+                        default:
+                            assetName = _assetName;
+                            break;
+                    }
+
                     let option = document.createElement("option");
-                    option.text = key.getName();
+                    option.text = assetName;
                     option.value = key.hash.toString();
                     option.dataset["amount"] = value.toString();
                     select.append(option);

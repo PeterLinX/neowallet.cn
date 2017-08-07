@@ -273,7 +273,7 @@ function scan()
     noResume = true;
     (<any>cordova).plugins.barcodeScanner.scan(result => {
         let address: string = result.text;
-        AntShares.UI.TabBase.showTab("#Tab_Account_Send", address);
+        AntShares.UI.TabBase.showTab("#Tab_Account_Index", address);
     }, error => {
         alert("Scanning failed: " + error);
     }, {

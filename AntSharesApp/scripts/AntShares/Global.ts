@@ -14,7 +14,7 @@ namespace AntShares {
 
         //MainNet
         public static mainHttpNetList: string[] = ["http://seed1.neo.org:10332", "http://seed2.neo.org:10332", "http://seed3.neo.org:10332", "http://seed4.neo.org:10332", "http://seed5.neo.org:10332"];
-        public static mainHttpsNetList: string[] = ["https://seed1.neo.org:10331", "https://seed3.neo.org:10331"];
+        public static mainHttpsNetList: string[] = ["https://seed3.neo.org:10331", "https://seed1.neo.org:10331"];
         //TestNet
         public static testNetList: string[] = ["http://seed1.neo.org:20332", "http://seed2.neo.org:20332", "http://seed3.neo.org:20332", "http://seed4.neo.org:20332", "http://seed5.neo.org:20332"];
 

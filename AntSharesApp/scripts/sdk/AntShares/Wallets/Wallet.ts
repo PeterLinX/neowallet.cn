@@ -424,7 +424,7 @@
                 }
             }).then(() =>
             {
-                setTimeout(this.processBlocks.bind(this), Core.Blockchain.SecondsPerBlock * 1000);
+                //setTimeout(this.processBlocks.bind(this), Core.Blockchain.SecondsPerBlock * 1000);
             });
         }
 
@@ -544,6 +544,7 @@
 
         private processNewBlock(block: Core.Block): PromiseLike<void>
         {
+            debugLog("processNewBlock");
             let promises = new Array<PromiseLike<Uint160>>();
             promises.push(block.ensureHash());
             for (let i = 0; i < block.transactions.length; i++)

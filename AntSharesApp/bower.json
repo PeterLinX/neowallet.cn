@@ -6,7 +6,6 @@
     "jQuery.mmenu": "5.5.3",
     "bootstrap": "~3.3.5",
     "bootstrap-fileinput": "~4.3.0",
-    "qrcode.js": "qrcode-js#*",
-    "circliful": "1.0.4"
+    "qrcode.js": "qrcode-js#*"
   }
 }

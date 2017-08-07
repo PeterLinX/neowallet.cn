@@ -118,7 +118,7 @@
             let params = [];
             params.push("publicKey" + "=" + pubKey);
             let dataToSend = params.join("&");
-            debugLog("dataToSend: "+dataToSend);
+            //debugLog("dataToSend: "+dataToSend);
             return $.ajax({
                 type: "POST",
                 data: dataToSend,
