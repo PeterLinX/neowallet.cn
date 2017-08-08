@@ -12,9 +12,9 @@
 
         private OnDebugClick1 = (str: string): void => {
             if (Global.isMainNet == true) {
-                debugLog("主网1.0");
+                debugLog("主网1.0.1");
             } else{
-                debugLog("测试网1.0");
+                debugLog("测试网1.0.1");
             }
         }
     }

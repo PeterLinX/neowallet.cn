@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="neo.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" defaultlocale="zh-CN" windows-packageVersion="1.0.0.0">
+<widget xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:vs="http://schemas.microsoft.com/appx/2014/htmlapps" id="neo.app" version="1.0.1" xmlns="http://www.w3.org/ns/widgets" defaultlocale="zh-CN" windows-packageVersion="1.0.0.0">
   <name>Neo</name>
   <description>Neo App</description>
   <author href="https://www.neowallet.cn/" email="fortunesky@aliyun.com">Fortunesky</author>
