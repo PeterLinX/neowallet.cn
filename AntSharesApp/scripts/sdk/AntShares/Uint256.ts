@@ -15,6 +15,7 @@ namespace AntShares
 
         public static parse(str: string): Uint256
         {
+            if (str.substring(0, 2) == ("0x")) str = str.substring(2);
             if (str.length != 64) throw new RangeError();
             let x = str.hexToBytes();
             let y = new Uint8Array(x.length);
