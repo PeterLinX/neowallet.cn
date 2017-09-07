@@ -21,7 +21,6 @@
                 return;
             }
             setTitle(1);
-            //this.circle();
 
             if (args[0]) {
                 $("#Tab_Account_Index .pay_address").val(args[0]);
@@ -57,7 +56,7 @@
                 this.map.clear();
                 this.assets.clear();
                 this.address = addr;
-                return this.loadBalance(addr);
+                return this.loadBalance2(addr);
             }).then(() => {
                 let promises = new Array<PromiseLike<void>>();
                 this.map.forEach(value => {
@@ -106,24 +105,6 @@
             this.refreshBalance(this.address);
         }
 
-        private circle = () => {
-            $("#circli").empty();
-            $("#circli").circliful({
-                animation: 1,
-                animationStep: 5,
-                foregroundBorderWidth: 15,
-                backgroundBorderWidth: 15,
-                percent: 100,
-                textSize: 28,
-                textStyle: 'font-size: 12px;',
-                textColor: '#666',
-                multiPercentage: 1,
-                percentages: [10, 20, 30]
-            }, () => {
-                this.circle();
-            });
-        }
-
         private loadAddr = (): PromiseLike<string> => {
             return Global.Wallet.getContracts()[0].getAddress().then(addr => {
                 this.address = addr;
@@ -131,7 +112,7 @@
             });
         }
 
-        private loadBalance = (addr: string): JQueryPromise<any> => {
+        private loadBalance1 = (addr: string): JQueryPromise<any> => {
             return Global.RestClient.getAddr(addr).then(response => {
                 let addr: JSON = JSON.parse(response);
                 let balances = addr["balances"];
@@ -140,6 +121,18 @@
                 }
             });
         }
+
+        private loadBalance2 = (addr: string): PromiseLike<any> => {
+            let params = [];
+            params.push(addr);
+            return Global.RpcClient.call("getaccountstate", params).then(result => {
+                for (let i = 0; i < result.balances.length; i++) {
+                    this.map.set(result.balances[i].asset, { assetId: Uint256.parse(result.balances[i].asset), amount: Fixed8.parse(result.balances[i].value) });
+                }
+            });
+        }
+
+
 
         private OnSendButtonClick = () => {
             if (formIsValid("form_account_send")) {

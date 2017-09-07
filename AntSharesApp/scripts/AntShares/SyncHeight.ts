@@ -5,7 +5,7 @@
 
         public processHeight = () => {
             Promise.resolve(1).then(() => {
-                return this.getNewHeight();
+                return this.getNewHeight2();
             }).then(() => {
                 let localHeight: number;
                 if (Global.height == 0) {
@@ -35,14 +35,18 @@
             });
         }
 
-        private getNewHeight = (): JQueryPromise<any> => {
+        private getNewHeight1 = (): JQueryPromise<any> => {
             return Global.RestClient.getHeight().then(response => {
                 let height: JSON = JSON.parse(response);
                 this.height = height["height"];
             });
         }
 
-
+        private getNewHeight2 = (): PromiseLike<any> => {
+            return Global.RpcClient.call("getblockcount", []).then(height => {
+                this.height = height;
+            });
+        }
     }
 
 }

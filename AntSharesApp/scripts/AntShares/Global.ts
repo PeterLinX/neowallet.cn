@@ -8,7 +8,7 @@ namespace AntShares {
         public static reConnectMultiplier: number = 15;
         public static height: number = 0;
         public static count: number = 0;
-
+        
         public static RestClient = new Network.REST.RestClient("https://api.otcgo.cn", Global.isMainNet);
 
 

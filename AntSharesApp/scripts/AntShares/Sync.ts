@@ -89,36 +89,6 @@
 
         }
 
-        //public static syncHeight = () => {
-        //    Promise.resolve(1).then(() => {
-        //        return AntShares.Sync.getNewHeight();
-        //    }).then(() => {
-        //        debugLog("height: "+AntShares.Sync.height);
-        //        debugLog("GlobalHeight: " +Global.height);
-        //        if (AntShares.Sync.height - Global.height >= 1) {
-        //            debugLog("piu");
-        //            Global.count = 0;
-        //            Global.height = AntShares.Sync.height;
-        //            return delay(Global.reConnectMultiplier * 1000).then(() => {
-        //                return AntShares.Sync.syncHeight();
-        //            });
-        //        } else {
-        //            return delay(5000).then(() => {
-        //                return AntShares.Sync.syncHeight();
-        //            });
-        //        }
-        //    }).catch(error => {
-        //        return AntShares.Sync.syncHeight();
-        //    });
-        //}
-
-        //private static getNewHeight = (): JQueryPromise<any> => {
-        //    return Global.RestClient.getHeight().then(response => {
-        //        let height: JSON = JSON.parse(response);
-        //        AntShares.Sync.height = height["height"];
-        //    });
-        //}
-
         public static timer = () => {
             return delay(1000).then(() => {
                 $("#countTimer").text(Global.count);
@@ -130,6 +100,4 @@
     }
     AntShares.Sync.connectNode(Global.isMainNet);
     AntShares.Sync.timer();
-    //AntShares.SyncHeight.processHeight();
-    //AntShares.Sync.syncHeight();
 }

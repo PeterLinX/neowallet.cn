@@ -18,6 +18,9 @@
             $(this.target).find("#postOnTransfer").click(this.OnPostOnTransferClick);
             $(this.target).find("#postBroadcast").click(this.OnPostBroadcastClick);
             $(this.target).find("#postTransfer").click(this.OnPostTransferClick);
+
+            $(this.target).find("#rpcHeight").click(this.OnGetRpcHeightClick);
+            $(this.target).find("#rpcBalance").click(this.OnGetRpcBalanceClick);
         }
 
         protected onload(args: any[]): void {
@@ -57,9 +60,8 @@
                 return master.get();
             }).then(result => {
                 let promises = [];
-                promises[0] = Promise.resolve(1);
                 for (let j = 0; j < result.length; j++) {
-                    promises[j + 1] = promises[j].then(Implementations.Wallets.IndexedDB.IndexedDBWallet.delete(result[j]));
+                    promises[j] = Implementations.Wallets.IndexedDB.IndexedDBWallet.delete(result[j]);
                 };
                 return Promise.all(promises);
             }).then(() => {
@@ -179,7 +181,7 @@
             //url: http://api.otcgo.cn/mainnet/address/AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos
             //{"utxo": {"602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": [{"prevIndex": 0, "prevHash": "25d337deae8730d9a627310d8b386e5c2323f9ca7ffe1a0096d5edddd2909172", "value": "0.08463024"}, {"prevIndex": 0, "prevHash": "4268b477e2d1631a1d6e3df535612fed06dfbc2d77c2a6cc5ff4cbc55f292b5a", "value": "0.0965472"}, {"prevIndex": 0, "prevHash": "26e96f2a3cea657c0fe622d07298dd39afd097f4da19d943b23a6533ecd380d5", "value": "0.1379856"}], "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b": [{"prevIndex": 0, "prevHash": "482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c", "value": "534"}]}, "_id": "AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos", "balances": {"602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": "0.31916304", "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b": "534"}}
             debugLog(4);
-            let addr = "AczMTp9o2rwuPTkrqfZE1PkiMDUiULMtdR";
+            let addr = "AGDJB6ufhfFL8oMtfUfWwY7RXtA9uHRBp1";
             Global.RestClient.getAddr(addr).then(response => {
                 let addr: JSON = JSON.parse(response);
                 debugLog(addr["utxo"]);
@@ -381,5 +383,28 @@
                 }
             });
         }
+
+
+        private OnGetRpcHeightClick = () => {
+            debugLog(156);
+            Global.RpcClient.call("getblockcount", []).then(height => {
+                debugLog(height);
+            });
+        }
+
+        private OnGetRpcBalanceClick = () => {
+            debugLog(157);
+            let addr: string = "AGDJB6ufhfFL8oMtfUfWwY7RXtA9uHRBp1";
+            let params = [];
+            params.push(addr);
+            Global.RpcClient.call("getaccountstate", params).then(result => {
+                for (let i = 0; i < result.balances.length; i++){
+                    debugLog(result.balances[i].asset);
+                    debugLog(result.balances[i].value);
+                }
+            });
+
+        }
+
     }
 }
