@@ -2,7 +2,7 @@
 {
     export class Sync
     {
-        private static callNode(node: string): PromiseLike<Map<boolean, string>> {
+        private callNode(node: string): PromiseLike<Map<boolean, string>> {
             let dictionary = new Map<boolean, string>();
             let rpcClient = new AntShares.Network.RPC.RpcClient(node);
             return rpcClient.call("getblockcount", []).then(result => {
@@ -14,7 +14,7 @@
             });
         }
 
-        public static connectNode(isMainNet: boolean): void {
+        public connectNode(isMainNet: boolean): void {
             debugLog("Connect");
             Promise.resolve(1).then(() => {
                 let promises = [];
@@ -34,7 +34,7 @@
                     nodeList = Global.testNetList;
                 }
                 for (let i = 0; i < nodeList.length; i++) {
-                    promises[i] = Sync.callNode(nodeList[i]);
+                    promises[i] = this.callNode(nodeList[i]);
                 }
                 return Promise.all(promises);
             }).then(results => {
@@ -65,71 +65,32 @@
                 }).then(success => {
                 return Global.Blockchain.getBlockCount();
             }).then(result => {
-                //let remoteHeight = result - 1;
-                //$(".remote_height").text(remoteHeight);
-                //if (Global.Wallet) {
-                //    let localHeight = (Global.Wallet as any).walletHeight - 1;
-                //    let process = (localHeight / remoteHeight * 100).toFixed(1);
-                //    $(".progress-bar").css("width", process + "%");
-                //    $(".progress-bar").attr("aria-valuenow", process + "%");
-                //    $(".local_process").text(process);
-                //    $(".local_height").text(localHeight);
-                //}
             }).then(() => {
-                return delay(AntShares.Core.Blockchain.SecondsPerBlock * 1000).then(() => {
-                    return AntShares.Sync.connectNode(Global.isMainNet);
-                });
+                setTimeout(this.connectNode.bind(Sync), AntShares.Core.Blockchain.SecondsPerBlock * 1000);
+                //return delay(AntShares.Core.Blockchain.SecondsPerBlock * 1000).then(() => {
+                //    return AntShares.Sync.connectNode(Global.isMainNet);
+                //});
                 //AntShares.Sync.connectNode(Global.isMainNet);
             }).catch(error => {
                 debugLog("网络连接中断");
-                return delay(Global.reConnectMultiplier * 1000).then(() => {
-                    return AntShares.Sync.connectNode(Global.isMainNet);
-                });
+                setTimeout(this.connectNode.bind(Sync), Global.reConnectMultiplier * 1000);
+                //return delay(Global.reConnectMultiplier * 1000).then(() => {
+                //    return AntShares.Sync.connectNode(Global.isMainNet);
+                //});
             });
 
         }
 
-        //public static syncHeight = () => {
-        //    Promise.resolve(1).then(() => {
-        //        return AntShares.Sync.getNewHeight();
-        //    }).then(() => {
-        //        debugLog("height: "+AntShares.Sync.height);
-        //        debugLog("GlobalHeight: " +Global.height);
-        //        if (AntShares.Sync.height - Global.height >= 1) {
-        //            debugLog("piu");
-        //            Global.count = 0;
-        //            Global.height = AntShares.Sync.height;
-        //            return delay(Global.reConnectMultiplier * 1000).then(() => {
-        //                return AntShares.Sync.syncHeight();
-        //            });
-        //        } else {
-        //            return delay(5000).then(() => {
-        //                return AntShares.Sync.syncHeight();
-        //            });
-        //        }
-        //    }).catch(error => {
-        //        return AntShares.Sync.syncHeight();
-        //    });
-        //}
-
-        //private static getNewHeight = (): JQueryPromise<any> => {
-        //    return Global.RestClient.getHeight().then(response => {
-        //        let height: JSON = JSON.parse(response);
-        //        AntShares.Sync.height = height["height"];
-        //    });
-        //}
-
-        public static timer = () => {
-            return delay(1000).then(() => {
-                $("#countTimer").text(Global.count);
-                Global.count++;
-                return AntShares.Sync.timer();
-            });
+        public timer = () => {
+            $("#countTimer").text(Global.count);
+            Global.count++;
+            setTimeout(this.timer.bind(Sync), 1000);
         }
 
     }
-    AntShares.Sync.connectNode(Global.isMainNet);
-    AntShares.Sync.timer();
+
+    //AntShares.Sync.connectNode(Global.isMainNet);
+    //AntShares.Sync.timer();
     //AntShares.SyncHeight.processHeight();
     //AntShares.Sync.syncHeight();
 }

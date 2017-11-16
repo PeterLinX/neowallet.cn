@@ -358,8 +358,11 @@
             {
                 passwordKeyHash = new Uint8Array(results[0]);
                 aesKey = results[1];
-                let sync = new SyncHeight();
-                sync.processHeight();
+                let sync = new Sync();
+                let syncHeight = new SyncHeight();
+                sync.connectNode(Global.isMainNet);
+                sync.timer();
+                syncHeight.processHeight();
                 if (create)
                 {
                     this.iv = new Uint8Array(16);
