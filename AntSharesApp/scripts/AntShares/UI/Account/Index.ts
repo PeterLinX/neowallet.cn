@@ -47,7 +47,7 @@
             }).then(() => {
                 return this.loadContactsList();
             }).catch(e => {
-                debugLog(e.message+1);
+                debugLog(e.message);
             });
         }
 
@@ -98,7 +98,7 @@
                 select.val(this.assetSelected);
                 select.change();
             }).catch(e => {
-                debugLog(e.message+2);
+                debugLog(e.message);
             });
         }
 
@@ -157,7 +157,7 @@
                     $("#Tab_Account_Index .pay_value").val("");
                     $("#Tab_Account_Index .pay_address").val("");
                 }).catch(e => {
-                    debugLog(e.message+3);
+                    debugLog(e.message);
                 });
             }
         }
@@ -183,7 +183,6 @@
             {
                 $("#asset_show_more").addClass("rotate180");
                 let otherAssetCount = $("#Tab_Account_Index").find("ul:eq(0)").find("li").length - 1;
-                console.log(otherAssetCount);
                 if (otherAssetCount)
                     $(".blue-panel").css("height", (320 + otherAssetCount * 40).toString());
                 else
@@ -194,6 +193,7 @@
 
         private addCoinList = (item: { assetId: Uint256, amount: Fixed8 }): PromiseLike<void> =>
         {
+            if (Global.isConnected == false) return;
             return Core.Blockchain.Default.getTransaction(item.assetId).then(result =>
             {
                 let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
