@@ -8,39 +8,39 @@
     },
     "installed_plugins": {
         "cordova-plugin-background-mode": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-badge": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-device": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-file": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-inappbrowser": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-itunesfilesharing": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-x-socialsharing": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "phonegap-plugin-barcodescanner": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-app-event": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         },
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "org.antshares.app"
+            "PACKAGE_NAME": "neo.app"
         }
     }
 }

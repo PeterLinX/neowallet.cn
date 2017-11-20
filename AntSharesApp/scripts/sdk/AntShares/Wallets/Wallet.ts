@@ -359,9 +359,9 @@
                 passwordKeyHash = new Uint8Array(results[0]);
                 aesKey = results[1];
                 let sync = new Sync();
-                let syncHeight = new SyncHeight();
-                sync.connectNode(Global.isMainNet);
+                sync.connectNode();
                 sync.timer();
+                let syncHeight = new SyncHeight();
                 syncHeight.processHeight();
                 if (create)
                 {

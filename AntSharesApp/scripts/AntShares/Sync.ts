@@ -2,25 +2,36 @@
 {
     export class Sync
     {
-        private callNode(node: string): PromiseLike<Map<boolean, string>> {
+        private callNode2 = (node: string): PromiseLike<Map<boolean, string>> => {
             let dictionary = new Map<boolean, string>();
             let rpcClient = new AntShares.Network.RPC.RpcClient(node);
-            return rpcClient.call("getblockcount", []).then(result => {
+            return rpcClient.call("getblockcount", []).then(resolve => {
+                dictionary.set(true, node);
+                return dictionary;
+            }, reject => {
+                dictionary.set(false, node);
+                return dictionary;
+            });
+        }
+
+        private callNode = (node: string): PromiseLike<Map<boolean, string>> => {
+            let dictionary = new Map<boolean, string>();
+            return fetch(node).then(result => {
                 dictionary.set(true, node);
                 return Promise.resolve(dictionary);
-            }, reject => {
+            }).catch(error => {
                 dictionary.set(false, node);
                 return Promise.resolve(dictionary);
             });
         }
 
-        public connectNode(isMainNet: boolean): void {
-            debugLog("Connect");
+        public connectNode = () => {
+            debugLog("Connect Node");
             Promise.resolve(1).then(() => {
                 let promises = [];
                 let nodeList: string[] = new Array<string>();
 
-                if (isMainNet) {
+                if (Global.isMainNet) {
                     if (isMobileApp.App()) {
                         //MainNet App https&http
                         //nodeList = Global.mainHttpsNetList.concat(Global.mainHttpNetList);
@@ -46,13 +57,13 @@
                         break;
                     }
                 }
-                if (Global.isConnected) {
+                if (Global.isConnected)
+                {
                     if (Global.RpcClient == null) {
                         Global.RpcClient = new Network.RPC.RpcClient(node);
                         Global.Blockchain = Core.Blockchain.registerBlockchain(new Implementations.Blockchains.RPC.RpcBlockchain(Global.RpcClient));
                         Global.Node = new Network.RemoteNode(Global.RpcClient);
                     } else {
-                        //debugLog(Global.RpcClient.Url);
                         if (Global.RpcClient.Url != node) {
                             Global.RpcClient = new Network.RPC.RpcClient(node);
                             Global.Blockchain = Core.Blockchain.registerBlockchain(new Implementations.Blockchains.RPC.RpcBlockchain(Global.RpcClient));
@@ -60,22 +71,19 @@
                         }
                     }
                 } else {
-                    throw new Error("网络连接中断");
+                    throw new Error("The Network is down.");
                 }
-                }).then(success => {
-                return Global.Blockchain.getBlockCount();
-            }).then(result => {
             }).then(() => {
                 setTimeout(this.connectNode.bind(Sync), AntShares.Core.Blockchain.SecondsPerBlock * 1000);
                 //return delay(AntShares.Core.Blockchain.SecondsPerBlock * 1000).then(() => {
-                //    return AntShares.Sync.connectNode(Global.isMainNet);
+                //    return AntShares.Sync.connectNode();
                 //});
                 //AntShares.Sync.connectNode(Global.isMainNet);
             }).catch(error => {
-                debugLog("网络连接中断");
+                debugLog(error.message);
                 setTimeout(this.connectNode.bind(Sync), Global.reConnectMultiplier * 1000);
                 //return delay(Global.reConnectMultiplier * 1000).then(() => {
-                //    return AntShares.Sync.connectNode(Global.isMainNet);
+                //    return AntShares.Sync.connectNode();
                 //});
             });
 
@@ -89,8 +97,4 @@
 
     }
 
-    //AntShares.Sync.connectNode(Global.isMainNet);
-    //AntShares.Sync.timer();
-    //AntShares.SyncHeight.processHeight();
-    //AntShares.Sync.syncHeight();
 }

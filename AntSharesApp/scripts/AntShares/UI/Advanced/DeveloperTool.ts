@@ -11,6 +11,7 @@
             $(this.target).find("#refresh_device").click(this.OnRefreshDevice);
             $(this.target).find("#no_backup").click(this.OnNoBackupButtonClick);
 
+            $(this.target).find("#seedHeight").click(this.OnSeedHeightClick);
             $(this.target).find("#getHeight").click(this.OnGetHeightClick);
             $(this.target).find("#getBlock").click(this.OnGetBlockClick);
             $(this.target).find("#getTransaction").click(this.OnGetTransactionClick);
@@ -116,6 +117,48 @@
             $("#version").text(device.version);
         }
 
+
+        private OnSeedHeightClick = () => {
+            //url: http://seed5.neo.org:10332
+            //result: "{"jsonrpc": "2.0","id": 1,"result": 1588661}"
+            debugLog(15);
+            let node: string = "http://seed5.neo.org:10332";
+            let rpcClient = new AntShares.Network.RPC.RpcClient(node);
+            let dictionary = new Map<boolean, string>();
+            //AntShares.Core.Blockchain.Default.getBlockCount().then(result => {
+            //    debugLog(result);
+            //}).catch(e => {
+            //    debugLog(e.message+7);
+            //    });
+
+            Global.Blockchain.getBlockCount().then(result => {
+                debugLog(result);
+            }).catch(e => {
+                debugLog(e.message + 7);
+            });
+
+            //fetch(node).then(result => {
+            //        console.log(result);
+            //    }).catch(error=>{
+            //        console.log("error: " + error);
+            //    });
+
+            //rpcClient.call("getblockcount", []).then(resolve => {
+            //    dictionary.set(true, node);
+            //    return dictionary;
+            //}, reject => {
+            //    dictionary.set(false, node);
+            //    return dictionary;
+            //    }).then(success => {
+            //        debugLog(123);
+            //        debugLog(dictionary);
+            //    }, fail => {
+            //        debugLog(321);
+            //        debugLog(dictionary);
+            //    }).catch(error => {
+            //        debugLog(error);
+            //    });
+        }
 
         private OnGetHeightClick = () => {
             //url: http://api.otcgo.cn/mainnet/height

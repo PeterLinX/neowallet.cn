@@ -13,13 +13,24 @@
 
         private static send(url: string, request: any): PromiseLike<any>
         {
-            return new Promise((resolve, reject) =>
-            {
+            return new Promise((resolve, reject) => {
                 let xhr = new XMLHttpRequest();
                 xhr.addEventListener("load", () => { resolve(JSON.parse(xhr.responseText)); });
                 xhr.addEventListener("error", () => { reject(new Error("Network Error")); });
                 xhr.open("POST", url, true);
                 xhr.setRequestHeader('Content-Type', 'application/json-rpc');
+                //xhr.onreadystatechange = (event) => {
+                //    if (xhr.readyState === 4) {
+                //        if (xhr.status === 200) {
+                //            resolve(xhr.responseText)
+                //        } else {
+                //            reject("Error: " + xhr.statusText);
+                //        }
+                //    }
+                //};
+                //xhr.onerror = function () {
+                //    reject(xhr.status);
+                //};
                 xhr.send(JSON.stringify(request));
             });
         }

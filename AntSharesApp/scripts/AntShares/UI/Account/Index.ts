@@ -27,8 +27,8 @@
             } else {
                 $("#Tab_Account_Index .pay_address").val("");
             }
-            $("#Tab_Account_Index #my_ans").text("0");
-            $("#Tab_Account_Index #my_anc").text("0");
+            $("#Tab_Account_Index #my_ans").text("***");
+            $("#Tab_Account_Index #my_anc").text("***");
             $("#Tab_Account_Index .pay_value").val("");
             
             $("#Tab_Account_Index .dropdown-menu").find("li.add").remove();
@@ -47,7 +47,7 @@
             }).then(() => {
                 return this.loadContactsList();
             }).catch(e => {
-                debugLog(e.message);
+                debugLog(e.message+1);
             });
         }
 
@@ -59,6 +59,7 @@
                 return this.loadBalance(addr);
             }).then(() => {
                 let promises = new Array<PromiseLike<void>>();
+                $("#Tab_Account_Index").find("ul:eq(0)").find(".addAsset").remove();
                 this.map.forEach(value => {
                     promises.push(this.addCoinList(value));
                 });
@@ -97,7 +98,7 @@
                 select.val(this.assetSelected);
                 select.change();
             }).catch(e => {
-                debugLog(e.message);
+                debugLog(e.message+2);
             });
         }
 
@@ -156,7 +157,7 @@
                     $("#Tab_Account_Index .pay_value").val("");
                     $("#Tab_Account_Index .pay_address").val("");
                 }).catch(e => {
-                    debugLog(e.message);
+                    debugLog(e.message+3);
                 });
             }
         }
@@ -196,7 +197,6 @@
             return Core.Blockchain.Default.getTransaction(item.assetId).then(result =>
             {
                 let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
-                asset_ul.find(".addAsset").remove();
 
                 let liTemplet = asset_ul.find("li:eq(0)");
                 let li = liTemplet.clone(true);
