@@ -70,17 +70,25 @@
             }).then(() => true, () => false);
         }
 
+        //public close(): PromiseLike<void>
+        //{
+        //    this.isrunning = false;
+        //    return new Promise<void>((resolve, reject) =>
+        //    {
+        //        let f = () =>
+        //        {
+        //            if (this.isclosed) resolve();
+        //            else setTimeout(f, 1000);
+        //        };
+        //        f();
+        //    });
+        //}
+
         public close(): PromiseLike<void>
         {
-            this.isrunning = false;
             return new Promise<void>((resolve, reject) =>
             {
-                let f = () =>
-                {
-                    if (this.isclosed) resolve();
-                    else setTimeout(f, 1000);
-                };
-                f();
+                resolve();
             });
         }
 
@@ -358,11 +366,6 @@
             {
                 passwordKeyHash = new Uint8Array(results[0]);
                 aesKey = results[1];
-                let sync = new Sync();
-                sync.connectNode();
-                sync.timer();
-                let syncHeight = new SyncHeight();
-                syncHeight.processHeight();
                 if (create)
                 {
                     this.iv = new Uint8Array(16);

@@ -116,10 +116,24 @@
         private loadBalance = (addr: string): JQueryPromise<any> => {
             return Global.RestClient.getAddr(addr).then(response => {
                 let addr: JSON = JSON.parse(response);
-                let balances = addr["balances"];
-                for (var key in balances) {
-                    this.map.set(key, { assetId: Uint256.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) });
+                if (jQuery.isEmptyObject(addr)) {
+                    let neo: string = AntShares.Core.Blockchain.AntShare.hash.toString();
+                    let gas: string = AntShares.Core.Blockchain.AntCoin.hash.toString();
+                    this.map.set(neo, { assetId: Uint256.parse(neo), amount: Fixed8.parse("0") });
+                    this.map.set(gas, { assetId: Uint256.parse(gas), amount: Fixed8.parse("0") });
+                } else {
+                    let balances = addr["balances"];
+                    for (var key in balances) {
+                        if (balances[key] == 0) continue;
+                        if (key.length == 64) {
+                            this.map.set(key, { assetId: Uint256.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) });
+                        } else if (key.length == 40){
+                            this.map.set(key, { assetId: Uint160.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) });
+                        }
+                        
+                    }
                 }
+                
             });
         }
 

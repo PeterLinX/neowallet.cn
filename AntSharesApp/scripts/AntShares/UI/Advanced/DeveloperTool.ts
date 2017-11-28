@@ -7,11 +7,13 @@
         protected oncreate(): void {
             $(this.target).find("#delete_wallet").click(this.OnDeleteButtonClick);
             $(this.target).find("#set_height").click(this.OnSetHeightButtonClick);
-            $(this.target).find("#refresh_nood").click(this.OnRefreshNode);
+            $(this.target).find("#refresh_node").click(this.OnRefreshNode);
             $(this.target).find("#refresh_device").click(this.OnRefreshDevice);
             $(this.target).find("#no_backup").click(this.OnNoBackupButtonClick);
 
             $(this.target).find("#seedHeight").click(this.OnSeedHeightClick);
+
+            //otcgo
             $(this.target).find("#getHeight").click(this.OnGetHeightClick);
             $(this.target).find("#getBlock").click(this.OnGetBlockClick);
             $(this.target).find("#getTransaction").click(this.OnGetTransactionClick);
@@ -19,6 +21,12 @@
             $(this.target).find("#postOnTransfer").click(this.OnPostOnTransferClick);
             $(this.target).find("#postBroadcast").click(this.OnPostBroadcastClick);
             $(this.target).find("#postTransfer").click(this.OnPostTransferClick);
+
+            //neoscan
+            $(this.target).find("#getHeight1").click(this.OnGetHeight1);
+            $(this.target).find("#getBlock1").click(this.OnGetBlock1);
+            $(this.target).find("#getTransaction1").click(this.OnGetTransaction1);
+            $(this.target).find("#getAddress1").click(this.OnGetAddress1);
         }
 
         protected onload(args: any[]): void {
@@ -57,21 +65,24 @@
                 Global.Wallet = null;
                 return master.get();
             }).then(result => {
-                let promises = [];
-                promises[0] = Promise.resolve(1);
-                for (let j = 0; j < result.length; j++) {
-                    promises[j + 1] = promises[j].then(Implementations.Wallets.IndexedDB.IndexedDBWallet.delete(result[j]));
-                };
-                return Promise.all(promises);
+                //let promises = [];
+                //for (let j = 0; j < result.length; j++) {
+                    //promises[j] = Implementations.Wallets.IndexedDB.IndexedDBWallet.delete(result[j]);
+                //    promises[j] = Implementations.Wallets.IndexedDB.DbContext.delete(result[j]);
+                //};
+                //return Promise.all(promises);
+
+                return Implementations.Wallets.IndexedDB.DbContext.delete("wallet");
             }).then(() => {
                 master.close();
-                setCookie("gesturePwd", "", 365);
+                //setCookie("gesturePwd", "", 365);
                 return Implementations.Wallets.IndexedDB.DbContext.delete("master");
             }).then(() => {
                 console.log("删除中，进度：100%");
                 alert("已经删除所有钱包文件！");
                 setTimeout(() => { location.reload(); }, 1000);
-            }).catch(reason => {
+                }).catch(reason => {
+                    debugLog(reason);
                 alert(reason);
             });
         }
@@ -117,7 +128,23 @@
             $("#version").text(device.version);
         }
 
+        private loadContext = (tx: Core.Transaction): PromiseLike<Core.SignatureContext> => {
+            let context: Core.SignatureContext;
+            return Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]);
+        }
 
+        private loadTx = (source: string, dests: string, amounts: string, assetId: string): JQueryPromise<any> => {
+            return Global.RestClient.postOnTransfer(source, dests, amounts, assetId).then(response => {
+                let res: JSON = JSON.parse(response);
+                if (res["result"] == true) {
+                    //alert("交易成功， tx = " + res["transaction"]);
+                    this.strTx = res["transaction"];
+                }
+            });
+        }
+
+
+        
         private OnSeedHeightClick = () => {
             //url: http://seed5.neo.org:10332
             //result: "{"jsonrpc": "2.0","id": 1,"result": 1588661}"
@@ -137,27 +164,6 @@
                 debugLog(e.message + 7);
             });
 
-            //fetch(node).then(result => {
-            //        console.log(result);
-            //    }).catch(error=>{
-            //        console.log("error: " + error);
-            //    });
-
-            //rpcClient.call("getblockcount", []).then(resolve => {
-            //    dictionary.set(true, node);
-            //    return dictionary;
-            //}, reject => {
-            //    dictionary.set(false, node);
-            //    return dictionary;
-            //    }).then(success => {
-            //        debugLog(123);
-            //        debugLog(dictionary);
-            //    }, fail => {
-            //        debugLog(321);
-            //        debugLog(dictionary);
-            //    }).catch(error => {
-            //        debugLog(error);
-            //    });
         }
 
         private OnGetHeightClick = () => {
@@ -167,6 +173,8 @@
             Global.RestClient.getHeight().then(response => {
                 let height: JSON = JSON.parse(response);
                 debugLog(height["height"]);
+            }, error => {
+                debugLog(error);
             });
         }
 
@@ -410,18 +418,39 @@
             });
         }
 
-        private loadContext = (tx: Core.Transaction): PromiseLike<Core.SignatureContext> => {
-            let context: Core.SignatureContext;
-            return Core.SignatureContext.create(tx, "AntShares.Core." + Core.TransactionType[tx.type]);
-        }
         
-        private loadTx = (source: string, dests: string, amounts: string, assetId: string): JQueryPromise<any> => {
-            return Global.RestClient.postOnTransfer(source, dests, amounts, assetId).then(response => {
-                let res: JSON = JSON.parse(response);
-                if (res["result"] == true) {
-                    //alert("交易成功， tx = " + res["transaction"]);
-                    this.strTx = res["transaction"];
-                }
+        private OnGetHeight1 = () => {
+            Global.api.getHeight().then(response => {
+                let height: JSON = JSON.parse(response);
+                debugLog(height["height"]);
+            }, error => {
+                debugLog(error);
+            });
+        }
+
+        private OnGetBlock1 = () => {
+            Global.api.getBlock(1).then(block => {
+                debugLog(block);
+            });
+        }
+
+        private OnGetTransaction1 = () => {
+            //url: http://api.otcgo.cn/mainnet/transaction/482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c
+            //result: {"net_fee": "0", "vout": [{"n": 0, "asset": "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b", "value": "534", "address": "AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos"}], "sys_fee": "0", "vin": [{"vout": 0, "txid": "d15bb1b8e8fff4e0ed6650779217036cdc47cc8bd64f96dda4110be239f77d5f"}], "txid": "482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c", "version": 0, "scripts": [{"invocation": "407e69a45eb4a91ac092a33e19224ca44f7f6d72a775729d07a6220b9eb39557384c3317bed018b6922bd5e815547242e1a30f7966a0479b32e959513704fa9d60", "verification": "21035bc519a5fec76ebe1bdd728a1a1505cdcd2f7cf104f34b9357ba4c96f1fc4ee2ac"}], "attributes": [], "_id": "482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c", "type": "ContractTransaction", "size": 202}
+            debugLog(3);
+            let txid = "482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c";
+            Global.api.getTx(txid).then(tx => {
+                debugLog(tx);
+            });
+        }
+
+        
+        private OnGetAddress1 = () => {
+            //url: http://api.otcgo.cn/mainnet/address/AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos
+            //{"utxo": {"602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": [{"prevIndex": 0, "prevHash": "25d337deae8730d9a627310d8b386e5c2323f9ca7ffe1a0096d5edddd2909172", "value": "0.08463024"}, {"prevIndex": 0, "prevHash": "4268b477e2d1631a1d6e3df535612fed06dfbc2d77c2a6cc5ff4cbc55f292b5a", "value": "0.0965472"}, {"prevIndex": 0, "prevHash": "26e96f2a3cea657c0fe622d07298dd39afd097f4da19d943b23a6533ecd380d5", "value": "0.1379856"}], "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b": [{"prevIndex": 0, "prevHash": "482aca533fea9ed97d46170440aeb70c6fe7400cd8baaec42a302a3439f2446c", "value": "534"}]}, "_id": "AHWzoRf9PHtW1nDaU7h2raBEkiXj9GsUos", "balances": {"602c79718b16e442de58778e148d0b1084e3b2dffd5de6b7b16cee7969282de7": "0.31916304", "c56f33fc6ecfcd0c225c4ab356fee59390af8560be0e930faebe74a6daff7c9b": "534"}}
+            let addr = "AczMTp9o2rwuPTkrqfZE1PkiMDUiULMtdR";
+            Global.api.getAddr(addr).then(address => {
+                debugLog(address);
             });
         }
     }

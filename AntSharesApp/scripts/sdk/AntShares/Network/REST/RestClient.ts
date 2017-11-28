@@ -31,6 +31,8 @@
                 contentType: 'application/json',
                 url: url,
                 timeout: 3 * 1000
+            }).then(() => {
+
             });
         }
 

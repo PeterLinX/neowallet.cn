@@ -81,5 +81,11 @@ module AntSharesApp {
         //    ($('#downloadAPP') as any).modal();
         //    return;
         //}
+        debugLog("onload");
+        let sync = new AntShares.Sync();
+        sync.connectNode();
+        sync.timer();
+        let syncHeight = new AntShares.SyncHeight();
+        syncHeight.processHeight();
     }
 }
