@@ -130,6 +130,7 @@
 .lang-my-contacts::after { content:'My Contacts' }
 .lang-no-contact::after { content:'You have no contacts' }
 .lang-asset-balance::after { content:'balance' }
+.lang-asset-id::after { content:'asset id' }
 .lang-ans::after { content:'Neo' }
 .lang-anc::after { content:'Gas' }
 .lang-start-create::after { content:'Create new wallet' }

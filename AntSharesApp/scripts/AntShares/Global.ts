@@ -4,7 +4,7 @@
 namespace AntShares {
     export class Global {
         public static isMainNet: boolean = true;
-        public static isDebug: boolean = true;
+        public static isDebug: boolean = false;
         public static isConnected: boolean = false;
         public static reConnectMultiplier: number = 15;
         public static height: number = 0;

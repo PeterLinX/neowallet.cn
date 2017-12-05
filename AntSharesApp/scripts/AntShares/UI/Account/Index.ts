@@ -2,8 +2,7 @@
 {
     export class Index extends TabBase
     {
-        private map: Map<string, { assetId: Uint256, amount: Fixed8 }>;
-        private assets: Map<Core.RegisterTransaction, Fixed8>;
+        private coins: Map<string, { name: string, amount: Fixed8}>;
         private address: string;
         private strTx: string;
         private assetSelected = 0;
@@ -27,13 +26,10 @@
             } else {
                 $("#Tab_Account_Index .pay_address").val("");
             }
-            $("#Tab_Account_Index #my_ans").text("***");
-            $("#Tab_Account_Index #my_anc").text("***");
             $("#Tab_Account_Index .pay_value").val("");
             
             $("#Tab_Account_Index .dropdown-menu").find("li.add").remove();
-            this.map = new Map<string, { assetId: Uint256, amount: Fixed8 }>();
-            this.assets = new Map<Core.RegisterTransaction, Fixed8>();
+            this.coins = new Map<string, { name: string, amount: Fixed8}>();
 
             let select = $("#Tab_Account_Index select");
             select.change(() => {
@@ -50,49 +46,98 @@
                 debugLog(e.message);
             });
         }
+        
+        private loadAddr = (): PromiseLike<string> => {
+            return Global.Wallet.getContracts()[0].getAddress().then(addr => {
+                this.address = addr;
+                return addr;
+            });
+        }
+
+        //private loadCoins = (addr: string): PromiseLike<any> => {
+        //    if (Global.isConnected == false) return;
+        //    return Global.RestClient.getAddr(addr).then(response => {
+        //        let addr: JSON = JSON.parse(response);
+        //        let promises = [];
+        //        if (jQuery.isEmptyObject(addr)) {
+        //            promises[0] = this.loadCoin({ assetId: AntShares.Core.Blockchain.AntShare.hash, amount: Fixed8.parse("0") });
+        //            promises[1] = this.loadCoin({ assetId: AntShares.Core.Blockchain.AntCoin.hash, amount: Fixed8.parse("0") });
+        //        } else {
+        //            let balances = addr["balances"];
+        //            for (var key in balances) {
+        //                if (balances[key] == 0) continue;
+        //                if (key.length == 64) {
+        //                    promises.push(this.loadCoin({ assetId: Uint256.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) }));
+        //                } else if (key.length == 40) {//NEP5
+        //                    //debugLog(key);
+        //                }
+        //            }
+        //        }
+        //        return Promise.all(promises);
+        //    }).then(results => {
+        //        for (let i = 0; i < results.length; i++) {
+        //            this.coins.set((<any>results[i]).assetId, { name: (<any>results[i]).name, amount: (<any>results[i]).amount });
+        //        }
+        //    });
+        //}
+
+        //private loadNEP5 = (item: { hash: string, amount: Fixed8 }): PromiseLike<{ assetId: string, name: string, amount: Fixed8 }> => {
+        //    return Core.Blockchain.Default.getContract(item.assetId).then(result => {
+        //        let asset = <Core.RegisterTransaction>result;
+        //        return { assetId: item.assetId.toString(), name: asset.getName(), amount: item.amount };
+        //    });
+        //}
+
+        private loadCoin = (item: { assetId: Uint256, amount: Fixed8 }): PromiseLike<{ assetId: string, name: string, amount: Fixed8 }> => {
+            return Core.Blockchain.Default.getTransaction(item.assetId).then(result => {
+                let asset = <Core.RegisterTransaction>result;
+                return { assetId: item.assetId.toString(), name: asset.getName(), amount: item.amount };
+            });
+        }
+
+        private loadCoins = (addr: string): PromiseLike<any> => {
+            if (Global.isConnected == false) return;
+            let params = [];
+            params.push(addr);
+            return Global.RpcClient.call("getaccountstate", params).then(result => {
+                let promises = [];
+                if (result.balances.length == 0) {
+                    promises[0] = this.loadCoin({ assetId: AntShares.Core.Blockchain.AntShare.hash, amount: Fixed8.parse("0") });
+                    promises[1] = this.loadCoin({ assetId: AntShares.Core.Blockchain.AntCoin.hash, amount: Fixed8.parse("0") });
+                } else {
+                    for (let i = 0; i < result.balances.length; i++) {
+                        promises[i] = this.loadCoin({ assetId: Uint256.parse(result.balances[i].asset), amount: Fixed8.parse(result.balances[i].value) });
+                    }
+                }
+                return Promise.all(promises);
+            }).then(results => {
+                for (let i = 0; i < results.length; i++) {
+                    this.coins.set((<any>results[i]).assetId, { name: (<any>results[i]).name, amount: (<any>results[i]).amount });
+                }
+            });
+        }
 
         private refreshBalance = (addr: string): PromiseLike<void> => {
             return Promise.resolve(addr).then(addr => {
-                this.map.clear();
-                this.assets.clear();
+                this.coins.clear();
                 this.address = addr;
-                return this.loadBalance(addr);
+                return this.loadCoins(addr);
             }).then(() => {
                 let promises = new Array<PromiseLike<void>>();
                 $("#Tab_Account_Index").find("ul:eq(0)").find(".addAsset").remove();
-                this.map.forEach(value => {
-                    promises.push(this.addCoinList(value));
+                this.coins.forEach((value, key, map) => {
+                    promises.push(this.updateCoinList(key, value));
                 });
                 return Promise.all(promises);
             }).then(() => {
                 let select = $("#Tab_Account_Index select");
                 select.html("");
                 select.append("<option value=0>" + Resources.global.pleaseChoose + "</option>");
-                this.assets.forEach((value, key, map) => {
-                    let assetName: string;
-                    let _assetName: string = key.getName();
-                    switch (_assetName) {
-                        case "小蚁股":
-                            assetName = "Neo";
-                            break;
-                        case "AntShare":
-                            assetName = "Neo";
-                            break;
-                        case "小蚁币":
-                            assetName = "NeoGas";
-                            break;
-                        case "AntCoin":
-                            assetName = "NeoGas";
-                            break;
-                        default:
-                            assetName = _assetName;
-                            break;
-                    }
-
+                this.coins.forEach((value, key, map) => {
                     let option = document.createElement("option");
-                    option.text = assetName;
-                    option.value = key.hash.toString();
-                    option.dataset["amount"] = value.toString();
+                    option.text = ansToNeo(value.name);
+                    option.value = key.toString();
+                    option.dataset["amount"] = value.amount.toString();
                     select.append(option);
                 });
                 select.val(this.assetSelected);
@@ -102,39 +147,28 @@
             });
         }
 
+        private updateCoinList = (assetId: string, item: { name: string, amount: Fixed8}): PromiseLike<void> => {
+            if (Global.isConnected == false) return;
+            if (assetId == Core.Blockchain.AntShare.hash.toString()) {
+                $("#my_ans").text(convert(item.amount.toString()))
+            }
+            else if (assetId == Core.Blockchain.AntCoin.hash.toString()) {
+                $("#my_anc").text(convert(item.amount.toString()))
+            } else {
+                let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
+                let liTemplet = asset_ul.find("li:eq(0)");
+                let li = liTemplet.clone(true);
+                li.removeAttr("style");
+                li.find(".asset_value").text(convert(item.amount.toString()));
+                li.find(".asset_id").text(assetId);
+                li.find(".asset_name").text(item.name);
+                li.addClass("addAsset");
+                asset_ul.append(li);
+            }
+        }
+
         private refreshBalanceEvent = (sender: Object) => {
             this.refreshBalance(this.address);
-        }
-
-        private loadAddr = (): PromiseLike<string> => {
-            return Global.Wallet.getContracts()[0].getAddress().then(addr => {
-                this.address = addr;
-                return addr;
-            });
-        }
-
-        private loadBalance = (addr: string): JQueryPromise<any> => {
-            return Global.RestClient.getAddr(addr).then(response => {
-                let addr: JSON = JSON.parse(response);
-                if (jQuery.isEmptyObject(addr)) {
-                    let neo: string = AntShares.Core.Blockchain.AntShare.hash.toString();
-                    let gas: string = AntShares.Core.Blockchain.AntCoin.hash.toString();
-                    this.map.set(neo, { assetId: Uint256.parse(neo), amount: Fixed8.parse("0") });
-                    this.map.set(gas, { assetId: Uint256.parse(gas), amount: Fixed8.parse("0") });
-                } else {
-                    let balances = addr["balances"];
-                    for (var key in balances) {
-                        if (balances[key] == 0) continue;
-                        if (key.length == 64) {
-                            this.map.set(key, { assetId: Uint256.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) });
-                        } else if (key.length == 40){
-                            this.map.set(key, { assetId: Uint160.parse(key), amount: Fixed8.parse(scientificToNumber(balances[key])) });
-                        }
-                        
-                    }
-                }
-                
-            });
         }
 
         private OnSendButtonClick = () => {
@@ -185,81 +219,6 @@
             });
         }
 
-        private OnShowMore =()=>
-        {
-            if ($("#asset_show_more").hasClass("rotate180"))
-            {
-                $("#asset_show_more").removeClass("rotate180");
-                $(".blue-panel").css("height", "240");
-                $(".other-assets").hide("400");
-            }
-            else
-            {
-                $("#asset_show_more").addClass("rotate180");
-                let otherAssetCount = $("#Tab_Account_Index").find("ul:eq(0)").find("li").length - 1;
-                if (otherAssetCount)
-                    $(".blue-panel").css("height", (320 + otherAssetCount * 40).toString());
-                else
-                    $(".blue-panel").css("height", 320);
-                $(".other-assets").show("400");
-            }
-        }
-
-        private addCoinList = (item: { assetId: Uint256, amount: Fixed8 }): PromiseLike<void> =>
-        {
-            if (Global.isConnected == false) return;
-            return Core.Blockchain.Default.getTransaction(item.assetId).then(result =>
-            {
-                let asset_ul = $("#Tab_Account_Index").find("ul:eq(0)");
-
-                let liTemplet = asset_ul.find("li:eq(0)");
-                let li = liTemplet.clone(true);
-                li.removeAttr("style");
-
-                let asset = <Core.RegisterTransaction>result;
-                this.assets.set(asset, item.amount);
-                if (asset.assetType == AntShares.Core.AssetType.AntShare) {
-                    $("#my_ans").text(convert(item.amount.toString()))
-                }
-                else if (asset.assetType == AntShares.Core.AssetType.AntCoin)
-                {
-                    $("#my_anc").text(convert(item.amount.toString()))
-                } else {
-                    li.find(".asset_value").text(convert(item.amount.toString()));
-                    li.find(".asset_issuer").text(asset.issuer.toString());
-                    li.find(".asset_name").text(asset.getName());
-                    li.addClass("addAsset");
-                    asset_ul.append(li);
-                }
-            });
-        }
-
-
-        private getName(assetName: string, lang = navigator.language): string {
-            let _names: string | Array<{ lang: string, name: string }>;
-            try {
-                _names = <string | Array<{ lang: string, name: string }>>JSON.parse(assetName);
-            }
-            catch (ex) {
-                _names = assetName;
-            }
-            if (typeof _names === "string") {
-                return _names;
-            }
-            else {
-                let map = new Map<string, string>();
-                for (let i = 0; i < _names.length; i++)
-                    map.set(_names[i].lang, _names[i].name);
-                if (map.has(lang))
-                    return map.get(lang);
-                else if (map.has("en"))
-                    return map.get("en");
-                else
-                    return _names[0].name;
-            }
-        }
-
-
         private signInternal(signable: Core.ISignable, account: AntShares.Wallets.Account): PromiseLike<ArrayBuffer> {
             let pubkey = account.publicKey.encodePoint(false);
             let d = new Uint8Array(account.privateKey).base64UrlEncode();
@@ -272,8 +231,6 @@
                 return window.crypto.subtle.sign({ name: "ECDSA", hash: { name: "SHA-256" } }, result, <any>ms.toArray());
             });
         }
-
-
 
         private loadContactsList = (): PromiseLike<void> => {
             let contacts: Contacts.Contact;
@@ -301,5 +258,22 @@
             });
         }
 
+
+        private OnShowMore = () => {
+            if ($("#asset_show_more").hasClass("rotate180")) {
+                $("#asset_show_more").removeClass("rotate180");
+                $(".blue-panel").css("height", "240");
+                $(".other-assets").hide("400");
+            }
+            else {
+                $("#asset_show_more").addClass("rotate180");
+                let otherAssetCount = $("#Tab_Account_Index").find("ul:eq(0)").find("li").length - 1;
+                if (otherAssetCount)
+                    $(".blue-panel").css("height", (320 + otherAssetCount * 40).toString());
+                else
+                    $(".blue-panel").css("height", 320);
+                $(".other-assets").show("400");
+            }
+        }
     }
 }

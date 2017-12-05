@@ -94,10 +94,14 @@
         private loadGas = (addr: string): JQueryPromise<any> => {
             //{"available": "0", "claims": [], "unavailable": "0"}
             return Global.RestClient.getGas(addr).then(response => {
-                let gas: JSON = JSON.parse(response);
-                this.availableGas = scientificToNumber(gas["available"]);
-                this.unAvailableGas = scientificToNumber(gas["unavailable"]);
-                
+                if (response == "{}" || response == "null") {
+                    this.availableGas = "0";
+                    this.unAvailableGas = "0";
+                } else {
+                    let gas: JSON = JSON.parse(response);
+                    this.availableGas = scientificToNumber(gas["available"]);
+                    this.unAvailableGas = scientificToNumber(gas["unavailable"]);
+                }
             });
         }
     }

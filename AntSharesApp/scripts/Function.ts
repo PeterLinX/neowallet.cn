@@ -322,3 +322,25 @@ function scientificToNumber(num): string {
     }
     return '0.' + zero + result;
 }
+
+function ansToNeo(name): string {
+    let assetName: string;
+    switch (name) {
+        case "小蚁股":
+            assetName = "Neo";
+            break;
+        case "AntShare":
+            assetName = "Neo";
+            break;
+        case "小蚁币":
+            assetName = "NeoGas";
+            break;
+        case "AntCoin":
+            assetName = "NeoGas";
+            break;
+        default:
+            assetName = name;
+            break;
+    }
+    return assetName;
+}

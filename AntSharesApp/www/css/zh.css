@@ -129,6 +129,7 @@
 .lang-my-contacts::after { content:'我的联系人' }
 .lang-no-contact::after { content:'您还没有联系人' }
 .lang-asset-balance::after { content:'余额' }
+.lang-asset-id::after { content:'资产ID' }
 .lang-ans::after { content:'Neo' }
 .lang-anc::after { content:'Gas' }
 .lang-start-create::after { content:'创建新钱包' }
