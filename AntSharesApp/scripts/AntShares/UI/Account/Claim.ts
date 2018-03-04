@@ -52,9 +52,8 @@
             }).then(signature => {
                 let sig: string = new Uint8Array(signature).toHexString();
                 Global.RestClient.postBroadcast(publicKey, sig, this.strTx).then(response => {
-                    let res: JSON = JSON.parse(response);
-                    if (res["result"] == true) {
-                        alert("交易成功， txid = " + res["txid"]);
+                    if (response["result"] == true) {
+                        alert("交易成功， txid = " + response["txid"]);
                     }
                 });
             });
@@ -76,9 +75,8 @@
 
         private loadTx = (pubKey: string): JQueryPromise<any> => {
             return Global.RestClient.claimGas(pubKey).then(response => {
-                let res: JSON = JSON.parse(response);
-                if (res["result"] == true) {
-                    this.strTx = res["transaction"];
+                if (response["result"] == true) {
+                    this.strTx = response["transaction"];
                 }
             });
         }
@@ -98,9 +96,8 @@
                     this.availableGas = "0";
                     this.unAvailableGas = "0";
                 } else {
-                    let gas: JSON = JSON.parse(response);
-                    this.availableGas = scientificToNumber(gas["available"]);
-                    this.unAvailableGas = scientificToNumber(gas["unavailable"]);
+                    this.availableGas = scientificToNumber(response["available"]);
+                    this.unAvailableGas = scientificToNumber(response["unavailable"]);
                 }
             });
         }

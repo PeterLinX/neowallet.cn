@@ -167,12 +167,13 @@
         }
 
         private OnGetHeightClick = () => {
-            //url: http://api.otcgo.cn/mainnet/height
+            //url: https://api.otcgo.cn/mainnet/height
             //result: "{"height": 1080065}"
             debugLog(1);
             Global.RestClient.getHeight().then(response => {
-                let height: JSON = JSON.parse(response);
-                debugLog(height["height"]);
+                //let height: JSON = JSON.parse(response);
+                debugLog(response);
+                debugLog(response["height"]);
             }, error => {
                 debugLog(error);
             });

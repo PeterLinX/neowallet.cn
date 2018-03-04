@@ -37,8 +37,7 @@
 
         private getNewHeight = (): JQueryPromise<any> => {
             return Global.RestClient.getHeight().then(response => {
-                let height: JSON = JSON.parse(response);
-                this.height = height["height"];
+                this.height = response["height"];
             });
         }
 

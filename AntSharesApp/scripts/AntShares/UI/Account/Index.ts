@@ -196,9 +196,8 @@
                 }).then(signature => {
                     let sig: string = new Uint8Array(signature).toHexString();
                     Global.RestClient.postBroadcast(publicKey, sig, this.strTx).then(response => {
-                        let res: JSON = JSON.parse(response);
-                        if (res["result"] == true) {
-                            alert("交易成功， txid = " + res["txid"]);
+                        if (response["result"] == true) {
+                            alert("交易成功， txid = " + response["txid"]);
                         }
                     });
                 }).then(() => {
@@ -212,9 +211,8 @@
 
         private loadTx = (source: string, dests: string, amounts: string, assetId: string): JQueryPromise<any> => {
             return Global.RestClient.postOnTransfer(source, dests, amounts, assetId).then(response => {
-                let res: JSON = JSON.parse(response);
-                if (res["result"] == true) {
-                    this.strTx = res["transaction"];
+                if (response["result"] == true) {
+                    this.strTx = response["transaction"];
                 }
             });
         }
