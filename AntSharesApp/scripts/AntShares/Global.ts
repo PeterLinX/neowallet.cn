@@ -16,24 +16,36 @@ namespace AntShares {
 
         //MainNet
         public static mainHttpNetList: string[] = [
-                                                    "http://seed1.redpulse.com:10332",
-                                                    "http://seed2.redpulse.com:10332",
-                                                    "http://seed1.neo.org:10332",
-                                                    "http://seed2.neo.org:10332",
-                                                    "http://seed3.neo.org:10332",
-                                                    "http://seed4.neo.org:10332",
-                                                    "http://seed5.neo.org:10332"
+            "http://seed1.ngd.network:10332",
+            "http://seed2.ngd.network:10332",
+            "http://seed3.ngd.network:10332",
+            "http://seed4.ngd.network:10332",
+            "http://seed5.ngd.network:10332",
+            "http://seed6.ngd.network:10332",
+            "http://seed7.ngd.network:10332",
+            "http://seed8.ngd.network:10332",
+            "http://seed9.ngd.network:10332",
+            "http://seed10.ngd.network:10332",
         ];
+
         public static mainHttpsNetList: string[] = [
-                                                    "https://seed1.redpulse.com:10331",
-                                                    "https://seed2.redpulse.com:10331",
-                                                    "https://seed2.switcheo.network:10331",
-                                                    "https://seed3.switcheo.network:10331",
-                                                    "https://seed4.switcheo.network:10331",
-                                                    "https://seed1.neo.org:10331"
+            "https://seed11.ngd.network:10331",
+            "https://seed12.ngd.network:10331",
         ];
+
         //TestNet
-        public static testNetList: string[] = ["http://seed1.neo.org:20332", "http://seed2.neo.org:20332", "http://seed3.neo.org:20332", "http://seed4.neo.org:20332", "http://seed5.neo.org:20332"];
+        public static testNetList: string[] = [
+            "http://seed1.ngd.network:20332",
+            "http://seed2.ngd.network:20332",
+            "http://seed3.ngd.network:20332",
+            "http://seed4.ngd.network:20332",
+            "http://seed5.ngd.network:20332",
+            "http://seed6.ngd.network:20332",
+            "http://seed7.ngd.network:20332",
+            "http://seed8.ngd.network:20332",
+            "http://seed9.ngd.network:20332",
+            "http://seed10.ngd.network:20332",
+        ];
 
         public static Wallet: Implementations.Wallets.IndexedDB.IndexedDBWallet;
         public static RpcClient: Network.RPC.RpcClient;
